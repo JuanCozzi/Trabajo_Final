@@ -1,1 +1,0 @@
-git clone https://git.overleaf.com/5d0ad2c18788b2511d997c72 Informes/Final/Latex
