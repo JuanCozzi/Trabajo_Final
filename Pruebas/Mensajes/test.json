@@ -1,0 +1,21 @@
+{
+    "data":{
+        "output":7,
+        "Level":0,
+        "Ton":1,
+        "Control":11,
+        "TMax":10,
+        "HourOn":"05:00",
+        "Tfun":0,
+        "Forzar":0,
+        "Hour":"08:55:30"
+    },
+    "msg":205
+}
+
+{
+    "data":{
+        "output":1
+    },
+    "msg":203
+}
