@@ -176,85 +176,85 @@ Wire Wire Line
 $Comp
 L Connector:Conn_01x03_Male J1
 U 1 1 5EC19264
-P 700 10850
-F 0 "J1" V 600 11000 50  0000 R CNN
-F 1 "Entrada transformador" V 400 10950 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-3_P5.08mm" H 700 10850 50  0001 C CNN
-F 3 "~" H 700 10850 50  0001 C CNN
-	1    700  10850
+P 4650 5600
+F 0 "J1" V 4500 5700 50  0001 R CNN
+F 1 "Entrada" V 4550 5700 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-3_P5.08mm" H 4650 5600 50  0001 C CNN
+F 3 "~" H 4650 5600 50  0001 C CNN
+	1    4650 5600
 	0    -1   -1   0   
 $EndComp
-Text GLabel 700  10500 1    50   Input ~ 0
+Text GLabel 4650 5250 1    50   Input ~ 0
 24acV1
-Text GLabel 600  10500 1    50   Input ~ 0
+Text GLabel 4550 5250 1    50   Input ~ 0
 24acV2
 Wire Wire Line
-	600  10500 600  10650
-Text GLabel 1900 10500 1    50   Input ~ 0
+	4550 5250 4550 5400
+Text GLabel 5850 5250 1    50   Input ~ 0
 Salida_1
-Text GLabel 1800 10500 1    50   Input ~ 0
+Text GLabel 5750 5250 1    50   Input ~ 0
 Salida_2
-Text GLabel 1700 10500 1    50   Input ~ 0
+Text GLabel 5650 5250 1    50   Input ~ 0
 Salida_3
-Text GLabel 1600 10500 1    50   Input ~ 0
+Text GLabel 5550 5250 1    50   Input ~ 0
 Salida_4
-Text GLabel 1500 10500 1    50   Input ~ 0
+Text GLabel 5450 5250 1    50   Input ~ 0
 Salida_5
-Text GLabel 1400 10500 1    50   Input ~ 0
+Text GLabel 5350 5250 1    50   Input ~ 0
 Salida_6
-Text GLabel 1300 10500 1    50   Input ~ 0
+Text GLabel 5250 5250 1    50   Input ~ 0
 Salida_7
-Text GLabel 1200 10500 1    50   Input ~ 0
+Text GLabel 5150 5250 1    50   Input ~ 0
 Salida_8
-Text GLabel 1100 10500 1    50   Input ~ 0
+Text GLabel 5050 5250 1    50   Input ~ 0
 Salida_9
-Text GLabel 1000 10500 1    50   Input ~ 0
+Text GLabel 4950 5250 1    50   Input ~ 0
 Salida_10
-Text GLabel 2850 10550 1    50   Input ~ 0
+Text GLabel 6850 5250 1    50   Input ~ 0
 Temp_0
 Wire Wire Line
-	2850 10700 2850 10550
+	6850 5400 6850 5250
 Wire Wire Line
-	2950 10700 2950 10550
-Text GLabel 3150 10550 1    50   Input ~ 0
+	6950 5400 6950 5250
+Text GLabel 7150 5250 1    50   Input ~ 0
 Temp_1
 $Comp
 L power:GND #PWR015
 U 1 1 5ED82E47
-P 3300 10550
-F 0 "#PWR015" H 3300 10300 50  0001 C CNN
-F 1 "GND" H 3305 10377 50  0000 C CNN
-F 2 "" H 3300 10550 50  0001 C CNN
-F 3 "" H 3300 10550 50  0001 C CNN
-	1    3300 10550
+P 7300 5250
+F 0 "#PWR015" H 7300 5000 50  0001 C CNN
+F 1 "GND" H 7305 5077 50  0000 C CNN
+F 2 "" H 7300 5250 50  0001 C CNN
+F 3 "" H 7300 5250 50  0001 C CNN
+	1    7300 5250
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	3150 10700 3150 10550
+	7150 5400 7150 5250
 Wire Wire Line
-	3250 10700 3250 10550
+	7250 5400 7250 5250
 Wire Wire Line
-	2150 10500 2150 10650
-Text GLabel 2250 10500 1    50   Input ~ 0
+	6100 5250 6100 5400
+Text GLabel 6200 5250 1    50   Input ~ 0
 Entrada_1
-Text GLabel 2350 10500 1    50   Input ~ 0
+Text GLabel 6300 5250 1    50   Input ~ 0
 Entrada_2
-Text GLabel 2450 10500 1    50   Input ~ 0
+Text GLabel 6400 5250 1    50   Input ~ 0
 Entrada_3
-Text GLabel 2550 10500 1    50   Input ~ 0
+Text GLabel 6500 5250 1    50   Input ~ 0
 Entrada_4
-Text GLabel 2650 10500 1    50   Input ~ 0
+Text GLabel 6600 5250 1    50   Input ~ 0
 Entrada_5
 Wire Wire Line
-	2250 10650 2250 10500
+	6200 5400 6200 5250
 Wire Wire Line
-	2350 10650 2350 10500
+	6300 5400 6300 5250
 Wire Wire Line
-	2450 10650 2450 10500
+	6400 5400 6400 5250
 Wire Wire Line
-	2550 10650 2550 10500
+	6500 5400 6500 5250
 Wire Wire Line
-	2650 10650 2650 10500
+	6600 5400 6600 5250
 Wire Wire Line
 	6550 1300 6450 1300
 Wire Wire Line
@@ -372,8 +372,6 @@ Wire Wire Line
 	3550 9000 3550 9200
 Text Notes 5350 8100 0    50   ~ 0
 Medición de corriente salida
-Wire Notes Line
-	5350 8150 5350 9700
 Wire Wire Line
 	5550 8350 6300 8350
 Text GLabel 950  4500 0    50   Input ~ 0
@@ -384,12 +382,6 @@ Wire Wire Line
 	5800 9000 5900 9000
 Wire Wire Line
 	5800 8600 5900 8600
-Wire Notes Line
-	3250 8150 3250 9700
-Wire Notes Line
-	5050 8150 5050 9700
-Wire Notes Line
-	5050 9700 3250 9700
 Text Notes 3300 9650 0    50   ~ 0
 Se repite el circuito modificando \nSx y Salida_x (x = [1,10])
 Text Notes 600  9550 0    50   ~ 0
@@ -491,8 +483,6 @@ Wire Wire Line
 	3550 8800 3550 8700
 Wire Wire Line
 	3550 8250 3550 8400
-Wire Notes Line
-	5050 8150 3250 8150
 Text GLabel 1250 8350 0    50   Input ~ 0
 Entrada_1
 Text GLabel 2750 8300 2    50   Input ~ 0
@@ -521,7 +511,7 @@ F 3 "" H 2850 9150 50  0001 C CNN
 $EndComp
 Text GLabel 2750 8750 2    50   Input ~ 0
 E1
-Text GLabel 2150 10500 1    50   Input ~ 0
+Text GLabel 6100 5250 1    50   Input ~ 0
 24acV2
 Text GLabel 2250 5400 2    50   Input ~ 0
 E2
@@ -608,7 +598,7 @@ L Device:R R6
 U 1 1 5EC3C23A
 P 6750 3100
 F 0 "R6" V 6750 3100 50  0000 C CNN
-F 1 "3,3" V 6650 3100 50  0000 C CNN
+F 1 "3k3" V 6650 3100 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" V 6680 3100 50  0001 C CNN
 F 3 "~" H 6750 3100 50  0001 C CNN
 	1    6750 3100
@@ -619,7 +609,7 @@ L Device:R R5
 U 1 1 5EC3A8A6
 P 7000 2900
 F 0 "R5" V 7000 2900 50  0000 C CNN
-F 1 "1,8" V 7100 2900 50  0000 C CNN
+F 1 "1k8" V 7100 2900 50  0000 C CNN
 F 2 "Resistor_SMD:R_0805_2012Metric" V 6930 2900 50  0001 C CNN
 F 3 "~" H 7000 2900 50  0001 C CNN
 	1    7000 2900
@@ -719,10 +709,6 @@ Wire Wire Line
 Connection ~ 5600 1100
 Wire Wire Line
 	5600 1100 5600 1300
-Wire Notes Line
-	600  7750 600  9700
-Wire Notes Line
-	600  9700 3000 9700
 Wire Wire Line
 	4450 8250 4400 8250
 Wire Wire Line
@@ -865,18 +851,18 @@ $EndComp
 $Comp
 L power:GND #PWR014
 U 1 1 6012116A
-P 3000 10550
-F 0 "#PWR014" H 3000 10300 50  0001 C CNN
-F 1 "GND" H 3005 10377 50  0000 C CNN
-F 2 "" H 3000 10550 50  0001 C CNN
-F 3 "" H 3000 10550 50  0001 C CNN
-	1    3000 10550
+P 7000 5250
+F 0 "#PWR014" H 7000 5000 50  0001 C CNN
+F 1 "GND" H 7005 5077 50  0000 C CNN
+F 2 "" H 7000 5250 50  0001 C CNN
+F 3 "" H 7000 5250 50  0001 C CNN
+	1    7000 5250
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	2950 10550 3000 10550
+	6950 5250 7000 5250
 Wire Wire Line
-	3250 10550 3300 10550
+	7250 5250 7300 5250
 Wire Wire Line
 	2200 4900 2600 4900
 Wire Wire Line
@@ -1041,14 +1027,6 @@ F 3 "~" H 4200 7100 50  0001 C CNN
 $EndComp
 Text GLabel 3900 7100 0    50   Input ~ 0
 AD0
-Wire Notes Line
-	5400 6500 5400 7750
-Wire Notes Line
-	5400 7750 3700 7750
-Wire Notes Line
-	3700 7750 3700 6500
-Wire Notes Line
-	3700 6500 5400 6500
 Wire Wire Line
 	6900 7100 6850 7100
 Text GLabel 6900 7100 2    50   Input ~ 0
@@ -1153,14 +1131,6 @@ F 9 "0.05406" H 6850 7300 50  0001 C CNN "precio 1000"
 	1    6850 7300
 	0    1    1    0   
 $EndComp
-Wire Notes Line
-	7300 6500 7300 7750
-Wire Notes Line
-	7300 7750 5600 7750
-Wire Notes Line
-	5600 7750 5600 6500
-Wire Notes Line
-	5600 6500 7300 6500
 Wire Wire Line
 	2250 5200 2200 5200
 Wire Wire Line
@@ -1429,12 +1399,6 @@ Wire Wire Line
 	6300 9300 6750 9300
 Wire Wire Line
 	6700 8800 7000 8800
-Wire Notes Line
-	7550 8150 7550 9700
-Wire Notes Line
-	5350 8150 7550 8150
-Wire Notes Line
-	5350 9700 7550 9700
 $Comp
 L Device:C C24
 U 1 1 5F181D4D
@@ -1473,14 +1437,6 @@ Wire Wire Line
 	6200 2600 6750 2600
 Wire Wire Line
 	6200 2800 6750 2800
-Wire Notes Line
-	7800 1900 500  1900
-Wire Notes Line
-	500  1900 500  500 
-Wire Notes Line
-	500  500  7750 500 
-Wire Notes Line
-	7750 500  7750 1900
 Wire Wire Line
 	600  14600 700  14600
 Wire Wire Line
@@ -2715,11 +2671,11 @@ F 3 "~" H 19450 15550 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	700  10500 700  10650
-Text GLabel 800  10500 1    50   Input ~ 0
+	4650 5250 4650 5400
+Text GLabel 4750 5250 1    50   Input ~ 0
 24acV2
 Wire Wire Line
-	800  10500 800  10650
+	4750 5250 4750 5400
 Text GLabel 5800 8600 0    50   Input ~ 0
 24acV1_F
 Text GLabel 4450 9350 2    50   Input ~ 0
@@ -2742,10 +2698,6 @@ Text GLabel 16950 15850 2    50   Input ~ 0
 Comun_salida_I
 Text GLabel 19250 16000 2    50   Input ~ 0
 Comun_salida_I
-Wire Notes Line
-	3000 7750 3000 9700
-Wire Notes Line
-	3000 7750 600  7750
 $Comp
 L Device:D_Zener D1
 U 1 1 5EE7E700
@@ -3314,120 +3266,109 @@ Wire Wire Line
 $Comp
 L Connector:Conn_01x03_Male J7
 U 1 1 5F3EF349
-P 2250 10850
-F 0 "J7" V 2150 11000 50  0000 R CNN
-F 1 "Entrada transformador" V 1950 10950 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-3_P5.08mm" H 2250 10850 50  0001 C CNN
-F 3 "~" H 2250 10850 50  0001 C CNN
-	1    2250 10850
+P 6200 5600
+F 0 "J7" V 6100 5750 50  0001 R CNN
+F 1 "transformador" V 6000 7350 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-3_P5.08mm" H 6200 5600 50  0001 C CNN
+F 3 "~" H 6200 5600 50  0001 C CNN
+	1    6200 5600
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Connector:Conn_01x02_Male J9
 U 1 1 5F49C054
-P 2850 10900
-F 0 "J9" V 3004 10712 50  0000 R CNN
-F 1 "Conn_01x02_Male" V 2913 10712 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 2850 10900 50  0001 C CNN
-F 3 "~" H 2850 10900 50  0001 C CNN
-	1    2850 10900
+P 6850 5600
+F 0 "J9" V 7004 5412 50  0001 R CNN
+F 1 "Conn_01x02_Male" V 6913 5412 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 6850 5600 50  0001 C CNN
+F 3 "~" H 6850 5600 50  0001 C CNN
+	1    6850 5600
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Connector:Conn_01x02_Male J10
 U 1 1 5F49D019
-P 3150 10900
-F 0 "J10" V 3304 10712 50  0000 R CNN
-F 1 "Conn_01x02_Male" V 3213 10712 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 3150 10900 50  0001 C CNN
-F 3 "~" H 3150 10900 50  0001 C CNN
-	1    3150 10900
+P 7150 5600
+F 0 "J10" V 7304 5412 50  0001 R CNN
+F 1 "Conn_01x02_Male" V 7213 5412 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 7150 5600 50  0001 C CNN
+F 3 "~" H 7150 5600 50  0001 C CNN
+	1    7150 5600
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Connector:Conn_01x03_Male J8
 U 1 1 5F49D270
-P 2550 10850
-F 0 "J8" V 2450 11000 50  0000 R CNN
-F 1 "Entrada transformador" V 2250 10950 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-3_P5.08mm" H 2550 10850 50  0001 C CNN
-F 3 "~" H 2550 10850 50  0001 C CNN
-	1    2550 10850
+P 6500 5600
+F 0 "J8" V 6400 5750 50  0001 R CNN
+F 1 "Salidas a relés" V 6400 7100 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-3_P5.08mm" H 6500 5600 50  0001 C CNN
+F 3 "~" H 6500 5600 50  0001 C CNN
+	1    6500 5600
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	1900 10500 1900 10650
+	5850 5250 5850 5400
 Wire Wire Line
-	1800 10500 1800 10650
+	5750 5250 5750 5400
 Wire Wire Line
-	1700 10500 1700 10650
+	5650 5250 5650 5400
 Wire Wire Line
-	1600 10500 1600 10650
+	5550 5250 5550 5400
 Wire Wire Line
-	1500 10500 1500 10650
+	5450 5250 5450 5400
 Wire Wire Line
-	1400 10500 1400 10650
+	5350 5250 5350 5400
 Wire Wire Line
-	1300 10500 1300 10650
+	5250 5250 5250 5400
 Wire Wire Line
-	1200 10500 1200 10650
+	5150 5250 5150 5400
 Wire Wire Line
-	1100 10500 1100 10650
+	5050 5250 5050 5400
 Wire Wire Line
-	1000 10500 1000 10650
+	4950 5250 4950 5400
 $Comp
 L Connector:Conn_01x02_Male J2
 U 1 1 5F7920D1
-P 1000 10850
-F 0 "J2" V 1154 10662 50  0000 R CNN
-F 1 "Conn_01x02_Male" V 1063 10662 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 1000 10850 50  0001 C CNN
-F 3 "~" H 1000 10850 50  0001 C CNN
-	1    1000 10850
+P 4950 5600
+F 0 "J2" V 4800 5300 50  0001 R CNN
+F 1 "l" V 4750 5750 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 4950 5600 50  0001 C CNN
+F 3 "~" H 4950 5600 50  0001 C CNN
+	1    4950 5600
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Connector:Conn_01x02_Male J3
 U 1 1 5F79278A
-P 1200 10850
-F 0 "J3" V 1354 10662 50  0000 R CNN
-F 1 "Conn_01x02_Male" V 1263 10662 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 1200 10850 50  0001 C CNN
-F 3 "~" H 1200 10850 50  0001 C CNN
-	1    1200 10850
+P 5150 5600
+F 0 "J3" V 4950 5250 50  0001 R CNN
+F 1 "Conn_01x02_Male" V 5213 5412 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 5150 5600 50  0001 C CNN
+F 3 "~" H 5150 5600 50  0001 C CNN
+	1    5150 5600
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Connector:Conn_01x02_Male J4
 U 1 1 5F792B0F
-P 1400 10850
-F 0 "J4" V 1554 10662 50  0000 R CNN
-F 1 "Conn_01x02_Male" V 1463 10662 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 1400 10850 50  0001 C CNN
-F 3 "~" H 1400 10850 50  0001 C CNN
-	1    1400 10850
-	0    -1   -1   0   
-$EndComp
-$Comp
-L Connector:Conn_01x02_Male J5
-U 1 1 5F792CBA
-P 1600 10850
-F 0 "J5" V 1754 10662 50  0000 R CNN
-F 1 "Conn_01x02_Male" V 1663 10662 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 1600 10850 50  0001 C CNN
-F 3 "~" H 1600 10850 50  0001 C CNN
-	1    1600 10850
+P 5350 5600
+F 0 "J4" V 5050 5250 50  0001 R CNN
+F 1 "Conn_01x02_Male" V 5413 5412 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 5350 5600 50  0001 C CNN
+F 3 "~" H 5350 5600 50  0001 C CNN
+	1    5350 5600
 	0    -1   -1   0   
 $EndComp
 $Comp
 L Connector:Conn_01x02_Male J6
 U 1 1 5F792F16
-P 1800 10850
-F 0 "J6" V 1954 10662 50  0000 R CNN
-F 1 "Conn_01x02_Male" V 1863 10662 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 1800 10850 50  0001 C CNN
-F 3 "~" H 1800 10850 50  0001 C CNN
-	1    1800 10850
+P 5750 5600
+F 0 "J6" V 5904 5412 50  0001 R CNN
+F 1 "Conn_01x02_Male" V 5450 5700 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 5750 5600 50  0001 C CNN
+F 3 "~" H 5750 5600 50  0001 C CNN
+	1    5750 5600
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
@@ -3503,4 +3444,23 @@ Wire Wire Line
 	2200 6400 2450 6400
 Text GLabel 10050 12500 2    50   Input ~ 0
 5V
+$Comp
+L Connector:Conn_01x02_Male J5
+U 1 1 5F792CBA
+P 5550 5600
+F 0 "J5" V 5300 5400 50  0001 R CNN
+F 1 "Conn_01x02_Male" V 5350 5550 50  0001 R CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 5550 5600 50  0001 C CNN
+F 3 "~" H 5550 5600 50  0001 C CNN
+	1    5550 5600
+	0    -1   -1   0   
+$EndComp
+Text Notes 6200 5800 0    50   ~ 0
+Entradas \npulsador
+Text Notes 6900 5900 0    50   ~ 0
+ Entrada\n sensores\ntemperatura
+Text Notes 5100 5750 0    50   ~ 0
+Salidas a relés
+Text Notes 4400 5800 0    50   ~ 0
+   Entrada \nTransformador
 $EndSCHEMATC

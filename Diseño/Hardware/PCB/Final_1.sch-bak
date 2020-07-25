@@ -179,7 +179,7 @@ U 1 1 5EC19264
 P 700 10850
 F 0 "J1" V 600 11000 50  0000 R CNN
 F 1 "Entrada transformador" V 400 10950 50  0000 R CNN
-F 2 "TerminalBlock_Altech:Altech_AK300_1x03_P5.00mm_45-Degree" H 700 10850 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-3_P5.08mm" H 700 10850 50  0001 C CNN
 F 3 "~" H 700 10850 50  0001 C CNN
 	1    700  10850
 	0    -1   -1   0   
@@ -376,7 +376,7 @@ Wire Notes Line
 	5350 8150 5350 9700
 Wire Wire Line
 	5550 8350 6300 8350
-Text GLabel 2250 5300 2    50   Input ~ 0
+Text GLabel 950  4500 0    50   Input ~ 0
 Corriente
 Text GLabel 5550 8350 0    50   Input ~ 0
 5V
@@ -523,9 +523,9 @@ Text GLabel 2750 8750 2    50   Input ~ 0
 E1
 Text GLabel 2150 10500 1    50   Input ~ 0
 24acV2
-Text GLabel 2250 5600 2    50   Input ~ 0
+Text GLabel 2250 5400 2    50   Input ~ 0
 E2
-Text GLabel 2250 5500 2    50   Input ~ 0
+Text GLabel 2250 6100 2    50   Input ~ 0
 E1
 Wire Wire Line
 	1700 3900 1700 3850
@@ -575,33 +575,33 @@ F 3 "~" H 3750 2400 50  0001 C CNN
 $EndComp
 Text GLabel 7200 2900 2    50   Input ~ 0
 Rx_ESP_5V
-Text GLabel 2250 4700 2    50   Input ~ 0
+Text GLabel 2250 5500 2    50   Input ~ 0
 E4
-Text GLabel 2250 4600 2    50   Input ~ 0
+Text GLabel 2250 5300 2    50   Input ~ 0
 E3
-Text GLabel 2250 4500 2    50   Input ~ 0
+Text GLabel 2250 5200 2    50   Input ~ 0
 S10
-Text GLabel 2250 4400 2    50   Input ~ 0
+Text GLabel 2250 5100 2    50   Input ~ 0
 S9
-Text GLabel 2250 4300 2    50   Input ~ 0
+Text GLabel 2250 4700 2    50   Input ~ 0
 S8
-Text GLabel 2250 4200 2    50   Input ~ 0
+Text GLabel 2250 4600 2    50   Input ~ 0
 S7
-Text GLabel 2250 6600 2    50   Input ~ 0
+Text GLabel 2250 4500 2    50   Input ~ 0
 S6
-Text GLabel 2250 6500 2    50   Input ~ 0
+Text GLabel 2250 4400 2    50   Input ~ 0
 S5
-Text GLabel 2250 6400 2    50   Input ~ 0
+Text GLabel 2250 4300 2    50   Input ~ 0
 S4
-Text GLabel 2250 6300 2    50   Input ~ 0
+Text GLabel 2250 4200 2    50   Input ~ 0
 S3
 Text GLabel 2250 6200 2    50   Input ~ 0
 S2
-Text GLabel 2250 6100 2    50   Input ~ 0
+Text GLabel 2250 6300 2    50   Input ~ 0
 S1
-Text GLabel 2250 5200 2    50   Input ~ 0
+Text GLabel 2250 6500 2    50   Input ~ 0
 AD1
-Text GLabel 2250 5100 2    50   Input ~ 0
+Text GLabel 2250 6600 2    50   Input ~ 0
 AD0
 $Comp
 L Device:R R6
@@ -787,8 +787,6 @@ Wire Wire Line
 Wire Wire Line
 	2250 6300 2200 6300
 Wire Wire Line
-	2200 6400 2250 6400
-Wire Wire Line
 	2250 6500 2200 6500
 Wire Wire Line
 	2200 6600 2250 6600
@@ -796,8 +794,6 @@ Wire Wire Line
 	2200 5700 2700 5700
 Text GLabel 3350 5700 2    50   Input ~ 0
 5V
-Wire Wire Line
-	3350 5700 3000 5700
 $Comp
 L Device:C C10
 U 1 1 5FE7BF91
@@ -807,17 +803,6 @@ F 1 "10u" H 1065 3655 50  0000 L CNN
 F 2 "Capacitor_SMD:CP_Elec_4x5.4" H 988 3550 50  0001 C CNN
 F 3 "~" H 950 3700 50  0001 C CNN
 	1    950  3700
-	1    0    0    -1  
-$EndComp
-$Comp
-L MCU_Microchip_ATmega:ATmega328-PU U4
-U 1 1 5EBE8044
-P 1600 5400
-F 0 "U4" H 1550 5650 50  0000 R CNN
-F 1 "ATmega328-PU" H 1800 5500 50  0000 R CNN
-F 2 "Package_QFP:TQFP-32_7x7mm_P0.8mm" H 1600 5400 50  0001 C CIN
-F 3 "1" H 1600 5400 50  0001 C CNN
-	1    1600 5400
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -869,12 +854,12 @@ $EndComp
 $Comp
 L Device:Buzzer BZ1
 U 1 1 5FF48500
-P 3850 5000
-F 0 "BZ1" H 4002 5029 50  0000 L CNN
-F 1 "Buzzer" H 4002 4938 50  0000 L CNN
-F 2 "Buzzer_Beeper:Buzzer_12x9.5RM7.6" V 3825 5100 50  0001 C CNN
-F 3 "~" V 3825 5100 50  0001 C CNN
-	1    3850 5000
+P 3150 6000
+F 0 "BZ1" H 3302 6029 50  0000 L CNN
+F 1 "Buzzer" H 3302 5938 50  0000 L CNN
+F 2 "Buzzer_Beeper:Buzzer_12x9.5RM7.6" V 3125 6100 50  0001 C CNN
+F 3 "~" V 3125 6100 50  0001 C CNN
+	1    3150 6000
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1185,53 +1170,45 @@ Wire Wire Line
 Wire Wire Line
 	2250 5600 2200 5600
 Wire Wire Line
-	3750 5200 3750 5100
+	3050 6200 3050 6100
 $Comp
 L power:GND #PWR07
 U 1 1 5EC16414
-P 3750 5700
-F 0 "#PWR07" H 3750 5450 50  0001 C CNN
-F 1 "GND" H 3755 5527 50  0000 C CNN
-F 2 "" H 3750 5700 50  0001 C CNN
-F 3 "" H 3750 5700 50  0001 C CNN
-	1    3750 5700
+P 3050 6700
+F 0 "#PWR07" H 3050 6450 50  0001 C CNN
+F 1 "GND" H 3055 6527 50  0000 C CNN
+F 2 "" H 3050 6700 50  0001 C CNN
+F 3 "" H 3050 6700 50  0001 C CNN
+	1    3050 6700
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3750 5700 3750 5600
+	3050 6700 3050 6600
 $Comp
 L Transistor_BJT:BC848 Q1
 U 1 1 6026F2B6
-P 3650 5400
-F 0 "Q1" H 3841 5446 50  0000 L CNN
-F 1 "BC848" H 3841 5355 50  0000 L CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 3850 5325 50  0001 L CIN
-F 3 "http://www.infineon.com/dgdl/Infineon-BC847SERIES_BC848SERIES_BC849SERIES_BC850SERIES-DS-v01_01-en.pdf?fileId=db3a304314dca389011541d4630a1657" H 3650 5400 50  0001 L CNN
-	1    3650 5400
+P 2950 6400
+F 0 "Q1" H 3141 6446 50  0000 L CNN
+F 1 "BC848" H 3141 6355 50  0000 L CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 3150 6325 50  0001 L CIN
+F 3 "http://www.infineon.com/dgdl/Infineon-BC847SERIES_BC848SERIES_BC849SERIES_BC850SERIES-DS-v01_01-en.pdf?fileId=db3a304314dca389011541d4630a1657" H 2950 6400 50  0001 L CNN
+	1    2950 6400
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:R R9
 U 1 1 5EC6DDF9
-P 2850 5400
-F 0 "R9" V 2850 5350 50  0000 L CNN
-F 1 "10k" V 2750 5350 50  0000 L CNN
-F 2 "Resistor_SMD:R_0805_2012Metric" V 2780 5400 50  0001 C CNN
-F 3 "~" H 2850 5400 50  0001 C CNN
-	1    2850 5400
+P 2600 6400
+F 0 "R9" V 2600 6350 50  0000 L CNN
+F 1 "10k" V 2500 6350 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 2530 6400 50  0001 C CNN
+F 3 "~" H 2600 6400 50  0001 C CNN
+	1    2600 6400
 	0    1    1    0   
 $EndComp
 Wire Wire Line
-	2200 5400 2700 5400
-Wire Wire Line
-	3450 5400 3000 5400
-Text GLabel 3800 4700 2    50   Input ~ 0
-5V
-Wire Wire Line
-	3800 4700 3750 4700
-Wire Wire Line
-	3750 4700 3750 4900
-Text GLabel 5550 3400 2    50   Input ~ 0
+	3050 5700 3050 5900
+Text GLabel 2250 5600 2    50   Input ~ 0
 E5
 Wire Wire Line
 	5550 3400 5500 3400
@@ -1346,17 +1323,6 @@ Wire Wire Line
 Wire Wire Line
 	3750 2800 3750 2550
 $Comp
-L Device:C C7
-U 1 1 5FAF344E
-P 3300 3050
-F 0 "C7" H 3350 3150 50  0000 L CNN
-F 1 "10u" H 3400 2950 50  0000 L CNN
-F 2 "Capacitor_SMD:CP_Elec_4x5.4" H 3338 2900 50  0001 C CNN
-F 3 "~" H 3300 3050 50  0001 C CNN
-	1    3300 3050
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:C C9
 U 1 1 5ED98522
 P 3950 3050
@@ -1383,12 +1349,7 @@ Connection ~ 3950 4000
 Wire Wire Line
 	3950 4000 4900 4000
 Wire Wire Line
-	3300 3200 3300 4000
-Wire Wire Line
 	3600 3200 3600 4000
-Wire Wire Line
-	3300 4000 3600 4000
-Connection ~ 3600 4000
 Wire Wire Line
 	3600 4000 3950 4000
 Wire Wire Line
@@ -1396,13 +1357,6 @@ Wire Wire Line
 Connection ~ 3600 2200
 Wire Wire Line
 	3600 2200 3750 2200
-Wire Wire Line
-	3300 2900 3300 2200
-Wire Wire Line
-	3300 2200 3600 2200
-Wire Wire Line
-	3300 2200 3200 2200
-Connection ~ 3300 2200
 Wire Wire Line
 	3750 2800 4300 2800
 Wire Wire Line
@@ -3250,8 +3204,6 @@ Text Notes 7900 11900 0    50   ~ 0
 Diver de entrada (x5)
 Text GLabel 8550 12550 0    50   Input ~ 0
 Entrada_5
-Text GLabel 10050 12500 2    50   Input ~ 0
-3,3V
 $Comp
 L Device:R R24
 U 1 1 5F326E02
@@ -3365,7 +3317,7 @@ U 1 1 5F3EF349
 P 2250 10850
 F 0 "J7" V 2150 11000 50  0000 R CNN
 F 1 "Entrada transformador" V 1950 10950 50  0000 R CNN
-F 2 "TerminalBlock_Altech:Altech_AK300_1x03_P5.00mm_45-Degree" H 2250 10850 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-3_P5.08mm" H 2250 10850 50  0001 C CNN
 F 3 "~" H 2250 10850 50  0001 C CNN
 	1    2250 10850
 	0    -1   -1   0   
@@ -3376,7 +3328,7 @@ U 1 1 5F49C054
 P 2850 10900
 F 0 "J9" V 3004 10712 50  0000 R CNN
 F 1 "Conn_01x02_Male" V 2913 10712 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_Altech_AK300-2_P5.00mm" H 2850 10900 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 2850 10900 50  0001 C CNN
 F 3 "~" H 2850 10900 50  0001 C CNN
 	1    2850 10900
 	0    -1   -1   0   
@@ -3387,7 +3339,7 @@ U 1 1 5F49D019
 P 3150 10900
 F 0 "J10" V 3304 10712 50  0000 R CNN
 F 1 "Conn_01x02_Male" V 3213 10712 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_Altech_AK300-2_P5.00mm" H 3150 10900 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 3150 10900 50  0001 C CNN
 F 3 "~" H 3150 10900 50  0001 C CNN
 	1    3150 10900
 	0    -1   -1   0   
@@ -3398,7 +3350,7 @@ U 1 1 5F49D270
 P 2550 10850
 F 0 "J8" V 2450 11000 50  0000 R CNN
 F 1 "Entrada transformador" V 2250 10950 50  0000 R CNN
-F 2 "TerminalBlock_Altech:Altech_AK300_1x03_P5.00mm_45-Degree" H 2550 10850 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-3_P5.08mm" H 2550 10850 50  0001 C CNN
 F 3 "~" H 2550 10850 50  0001 C CNN
 	1    2550 10850
 	0    -1   -1   0   
@@ -3429,7 +3381,7 @@ U 1 1 5F7920D1
 P 1000 10850
 F 0 "J2" V 1154 10662 50  0000 R CNN
 F 1 "Conn_01x02_Male" V 1063 10662 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_Altech_AK300-2_P5.00mm" H 1000 10850 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 1000 10850 50  0001 C CNN
 F 3 "~" H 1000 10850 50  0001 C CNN
 	1    1000 10850
 	0    -1   -1   0   
@@ -3440,7 +3392,7 @@ U 1 1 5F79278A
 P 1200 10850
 F 0 "J3" V 1354 10662 50  0000 R CNN
 F 1 "Conn_01x02_Male" V 1263 10662 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_Altech_AK300-2_P5.00mm" H 1200 10850 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 1200 10850 50  0001 C CNN
 F 3 "~" H 1200 10850 50  0001 C CNN
 	1    1200 10850
 	0    -1   -1   0   
@@ -3451,7 +3403,7 @@ U 1 1 5F792B0F
 P 1400 10850
 F 0 "J4" V 1554 10662 50  0000 R CNN
 F 1 "Conn_01x02_Male" V 1463 10662 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_Altech_AK300-2_P5.00mm" H 1400 10850 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 1400 10850 50  0001 C CNN
 F 3 "~" H 1400 10850 50  0001 C CNN
 	1    1400 10850
 	0    -1   -1   0   
@@ -3462,7 +3414,7 @@ U 1 1 5F792CBA
 P 1600 10850
 F 0 "J5" V 1754 10662 50  0000 R CNN
 F 1 "Conn_01x02_Male" V 1663 10662 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_Altech_AK300-2_P5.00mm" H 1600 10850 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 1600 10850 50  0001 C CNN
 F 3 "~" H 1600 10850 50  0001 C CNN
 	1    1600 10850
 	0    -1   -1   0   
@@ -3473,7 +3425,7 @@ U 1 1 5F792F16
 P 1800 10850
 F 0 "J6" V 1954 10662 50  0000 R CNN
 F 1 "Conn_01x02_Male" V 1863 10662 50  0000 R CNN
-F 2 "TerminalBlock:TerminalBlock_Altech_AK300-2_P5.00mm" H 1800 10850 50  0001 C CNN
+F 2 "TerminalBlock:TerminalBlock_bornier-2_P5.08mm" H 1800 10850 50  0001 C CNN
 F 3 "~" H 1800 10850 50  0001 C CNN
 	1    1800 10850
 	0    -1   -1   0   
@@ -3525,4 +3477,30 @@ Text GLabel 8550 13350 0    50   Input ~ 0
 Comun_salida_I
 Text GLabel 1250 9150 0    50   Input ~ 0
 Comun_salida_I
+$Comp
+L MCU_Microchip_ATmega:ATmega328-AU U4
+U 1 1 5EE667BA
+P 1600 5400
+F 0 "U4" H 1600 5500 50  0000 C CNN
+F 1 "ATmega328-AU" H 1550 5350 50  0000 C CNN
+F 2 "Package_QFP:TQFP-32_7x7mm_P0.8mm" H 1600 5400 50  0001 C CIN
+F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/ATmega328_P%20AVR%20MCU%20with%20picoPower%20Technology%20Data%20Sheet%2040001984A.pdf" H 1600 5400 50  0001 C CNN
+	1    1600 5400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3200 2200 3600 2200
+Wire Wire Line
+	2250 5400 2200 5400
+Wire Wire Line
+	950  4500 1000 4500
+Connection ~ 3050 5700
+Wire Wire Line
+	3050 5700 3000 5700
+Wire Wire Line
+	3050 5700 3350 5700
+Wire Wire Line
+	2200 6400 2450 6400
+Text GLabel 10050 12500 2    50   Input ~ 0
+5V
 $EndSCHEMATC
