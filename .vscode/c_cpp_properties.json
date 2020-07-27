@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "D:\\Archivos de programa\\Arduino\\tools\\**",
+                "D:\\Archivos de programa\\Arduino\\hardware\\arduino\\avr\\**",
+                "C:\\Users\\Nacho\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\**",
+                "C:\\Users\\Nacho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.2\\**"
+            ],
+            "forcedInclude": [
+                "D:\\Archivos de programa\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
+            ],
+            "intelliSenseMode": "msvc-x64"
+        }
+    ],
+    "version": 4
+}

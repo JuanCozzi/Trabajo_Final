@@ -11,7 +11,7 @@
 #define BUZZER_PIN          5   // BUZZER_PIN
 #define INPUT_LEVEL_PIN     6   // PIN_LEVEL
 #define MEMORIA_JSON        800
-#define NUMBER_ID           100
+#define NUMBER_ID           0
 #define TEMPERATURE_SAMPLES 10
 #define MAX_SET             50
 #define A_COEFICIENT        -0.01390016258e-3
@@ -23,17 +23,17 @@
 #define DATA                "data"
 #define ID                  "ID"
 #define MSG                 "msg"
-#define OUTPUT_NUMBER       "output"
-#define STATUS              "Status"    //0
-#define TIME_ON             "Ton"       //1
-#define HOUR_ON             "HourOn"    //2
-#define TIME_MAX            "TMax"      //3
-#define OPERATING_TIME      "Tfun"      //4
-#define LEVEL               "Level"     //5
-#define CONTROL             "Control"   //6
-#define FORZAR              "Forzar"    //7
+#define OUTPUT_NUMBER       "Output"
+#define STATUS              "Status"          //0
+#define TIME_ON             "TimeOn"          //1
+#define HOUR_ON             "HourOn"          //2
+#define TIME_MAX            "TimeMax"         //3
+#define OPERATING_TIME      "OperationTime"   //4
+#define LEVEL               "Level"           //5
+#define CONTROL             "Control"         //6
+#define FORZAR              "Force"           //7
 #define HOUR                "Hour"      
-#define SET_TEMPERATURA     "SetTemp"   //8
+#define SET_TEMPERATURA     "SetTemp"         //8
 #define TEMP                "Temp"      
 
 // Mensajes del protocolo MSG:
