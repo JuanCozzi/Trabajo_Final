@@ -777,7 +777,7 @@ Wire Wire Line
 Wire Wire Line
 	2200 6600 2250 6600
 Wire Wire Line
-	2200 5700 2700 5700
+	2200 5700 2600 5700
 Text GLabel 3350 5700 2    50   Input ~ 0
 5V
 $Comp
@@ -3463,4 +3463,45 @@ Text Notes 5100 5750 0    50   ~ 0
 Salidas a relés
 Text Notes 4400 5800 0    50   ~ 0
    Entrada \nTransformador
+$Comp
+L Connector_Generic:Conn_02x03_Odd_Even J11
+U 1 1 5F24108F
+P 7000 4350
+F 0 "J11" H 7050 4667 50  0000 C CNN
+F 1 "SPI" H 7050 4576 50  0000 C CNN
+F 2 "Connector_PinSocket_2.54mm:PinSocket_2x03_P2.54mm_Vertical" H 7000 4350 50  0001 C CNN
+F 3 "~" H 7000 4350 50  0001 C CNN
+	1    7000 4350
+	1    0    0    -1  
+$EndComp
+Text GLabel 6800 4250 0    50   Input ~ 0
+5V
+$Comp
+L power:GND #PWR0101
+U 1 1 5F245110
+P 6800 4450
+F 0 "#PWR0101" H 6800 4200 50  0001 C CNN
+F 1 "GND" H 6805 4277 50  0000 C CNN
+F 2 "" H 6800 4450 50  0001 C CNN
+F 3 "" H 6800 4450 50  0001 C CNN
+	1    6800 4450
+	1    0    0    -1  
+$EndComp
+Text GLabel 7300 4250 2    50   Input ~ 0
+S7
+Text GLabel 6800 4350 0    50   Input ~ 0
+S6
+Text GLabel 7300 4350 2    50   Input ~ 0
+S8
+Text GLabel 7300 4450 2    50   Input ~ 0
+RST
+Text GLabel 3350 5500 2    50   Input ~ 0
+RST
+Wire Wire Line
+	3350 5500 2600 5500
+Wire Wire Line
+	2600 5500 2600 5700
+Connection ~ 2600 5700
+Wire Wire Line
+	2600 5700 2700 5700
 $EndSCHEMATC

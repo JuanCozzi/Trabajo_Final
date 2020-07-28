@@ -8,9 +8,7 @@
                 "C:\\Users\\Nacho\\AppData\\Local\\Arduino15\\packages\\esp8266\\tools\\**",
                 "C:\\Users\\Nacho\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\2.7.2\\**"
             ],
-            "forcedInclude": [
-                "D:\\Archivos de programa\\Arduino\\hardware\\arduino\\avr\\cores\\arduino\\Arduino.h"
-            ],
+            "forcedInclude": [],
             "intelliSenseMode": "msvc-x64"
         }
     ],
