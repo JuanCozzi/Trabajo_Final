@@ -123,7 +123,8 @@ function getDeviceConfig() {
         
         data.outputs.forEach(output => {
             let row = document.createElement('tr');
-            output_cell = document.createElement('td');
+            output_number_cell = document.createElement('td');
+            output_name_cell = document.createElement('td');
             hour_on_cell = document.createElement('td');
             time_on_cell = document.createElement('td');
             power_cell = document.createElement('td');
@@ -133,7 +134,8 @@ function getDeviceConfig() {
             input_dependency_cell = document.createElement('td');
             status_cell = document.createElement('td')
     
-            output_cell.appendChild(document.createTextNode(output.Output))
+            output_number_cell.appendChild(document.createTextNode(output.Output))
+            output_name_cell.appendChild(document.createTextNode(output.Name !== null ? output.Name : '-'))
             hour_on_cell.appendChild(document.createTextNode(output.HourOn))
             time_on_cell.appendChild(document.createTextNode(output.TimeOn))
             power_cell.appendChild(document.createTextNode(output.Power))
@@ -161,7 +163,8 @@ function getDeviceConfig() {
                     </span>
                 </td>
             `))
-            row.appendChild(output_cell)
+            row.appendChild(output_number_cell)
+            row.appendChild(output_name_cell)
             row.appendChild(hour_on_cell)
             row.appendChild(time_on_cell)
             row.appendChild(power_cell)
@@ -172,7 +175,7 @@ function getDeviceConfig() {
             row.appendChild(status_cell)
             row.appendChild(htmlToElement(`
                 <td>
-                    <a href="#editOutputModal" class="edit" data-output-number="${output.Output}" data-hour-on="${output.HourOn}" data-time-on="${output.TimeOn}"
+                    <a href="#editOutputModal" class="edit" data-output-number="${output.Output}" data-name="${output.Name}" data-hour-on="${output.HourOn}" data-time-on="${output.TimeOn}"
                     data-power="${output.Power}" data-energy-max="${output.EnergyMax}" data-level="${output.Level}" data-force="${output.Force}"
                         data-input-dependency="${output.Control}" data-status="${output.Status}" onClick="editOutputPrepare(this.dataset)"
                         data-toggle="modal">
@@ -211,6 +214,7 @@ function addOutputPrepare() {
 
 function addOutput() {
     let output = parseInt(document.querySelector('#outputAddNumber').value);
+    let name = document.querySelector('#outputAddName').value;
     let hour_on = document.querySelector('#outputAddHourOn').value;
     let time_on = parseInt(document.querySelector('#outputAddTimeOn').value);
     let power = parseInt(document.querySelector('#outputAddPower').value);
@@ -228,6 +232,7 @@ function addOutput() {
     let output_data = {
         'ID': device_id,
         'Output': output,
+        'Name': name,
         'HourOn': hour_on !== '' ? hour_on: 'xx:xx',
         'TimeOn': !isNaN(time_on) ? time_on: parseInt(document.querySelector('#outputAddTimeOn').placeholder),
         'Power': !isNaN(power) ? power: parseInt(document.querySelector('#outputAddPower').placeholder),
@@ -271,6 +276,7 @@ function sliderClicked(slider) {
 function editOutputPrepare(output_data) {
     document.querySelector('#outputEditNumber').innerHTML = `Output number: ${output_data.outputNumber}`;
     document.querySelector('#outputEditNumber').dataset.outputNumber = output_data.outputNumber;
+    document.querySelector('#outputEditName').placeholder = output_data.name !== "null" ? output_data.name : '-';
     document.querySelector('#outputEditHourOn').placeholder = output_data.hourOn;
     document.querySelector('#outputEditTimeOn').placeholder = output_data.timeOn;
     document.querySelector('#outputEditPower').placeholder = output_data.power;
@@ -296,6 +302,7 @@ function editOutput() {
         'Output': document.querySelector('#outputEditNumber').dataset.outputNumber
     }
 
+    let new_name = document.querySelector('#outputEditName').value;
     let new_hour_on = document.querySelector('#outputEditHourOn').value;
     let new_time_on = parseInt(document.querySelector('#outputEditTimeOn').value);
     let new_power = parseInt(document.querySelector('#outputEditPower').value);
@@ -314,6 +321,12 @@ function editOutput() {
     }
     
     let change_made = false;
+
+    if (new_name !== '' && new_name !== document.querySelector('#outputEditName').placeholder)
+    {
+        change_made = true;
+        output.Name = new_name;
+    }
 
     if (new_hour_on !== '' && new_hour_on !== document.querySelector('#outputEditHourOn').placeholder)
     {
@@ -397,5 +410,6 @@ function deleteOutputs(output) {
             'ID': device_id,
             'Output': parseInt(output)
         },
-        'msg': 203}))
+        'msg': 203
+    }))
 }

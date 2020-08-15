@@ -351,7 +351,6 @@ class UserConsumer(AsyncJsonWebsocketConsumer):
                 print('ADD errors ', await sync_to_async(form.errors.get_json_data)())
                 response = {'msg': status_codes.MSG_FORMAT_ERROR}
         elif msg == status_codes.OUTPUT_DELETED_BY_USER:
-            # content['data'] = DeviceOutput.get_default_output(content['data']['ID'], content['data']['Output'])
             response = content
         elif msg == status_codes.OUTPUT_PARAMETERS_CHANGED_BY_USER:
             output = await self.get_output(device_id, content['data']['Output'])
