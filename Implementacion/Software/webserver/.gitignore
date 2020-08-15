@@ -1,0 +1,7 @@
+env/
+__pycache__/
+migrations/
+deploy/
+/static/
+db.sqlite3
+secret_key.txt

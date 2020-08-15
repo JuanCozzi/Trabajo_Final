@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{% endblock %}</title>
+{% load static %}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- jQuery CDN - Slim version (=without AJAX) -->
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+<!-- Popper.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+<!-- Bootstrap JS -->
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script> -->
+<!-- jQuery Custom Scroller CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+{% block included_scripts %}{% endblock %}
+
+<style type="text/css">
+    body {
+        color: #566787;
+		background: #f5f5f5;
+		font-family: 'Varela Round', sans-serif;
+		font-size: 13px;
+	}
+	.table-wrapper {
+        background: #fff;
+        padding: 20px 25px;
+        margin: 30px 0;
+		border-radius: 3px;
+        box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    }
+	.table-title {        
+		padding-bottom: 15px;
+		background: #435d7d;
+		color: #fff;
+		padding: 16px 30px;
+		margin: -20px -25px 10px;
+		border-radius: 3px 3px 0 0;
+    }
+    .table-title h2 {
+		margin: 5px 0 0;
+		font-size: 24px;
+	}
+	.table-title .btn-group {
+		float: right;
+	}
+	.table-title .btn {
+		color: #fff;
+		float: right;
+		font-size: 13px;
+		border: none;
+		min-width: 50px;
+		border-radius: 2px;
+		border: none;
+		outline: none !important;
+		margin-left: 10px;
+	}
+	.table-title .btn i {
+		float: left;
+		font-size: 21px;
+		margin-right: 5px;
+	}
+	.table-title .btn span {
+		float: left;
+		margin-top: 2px;
+	}
+    table.table tr th, table.table tr td {
+        border-color: #e9e9e9;
+		padding: 12px 15px;
+		vertical-align: middle;
+    }
+	table.table tr th:first-child {
+		width: 60px;
+	}
+	table.table tr th:last-child {
+		width: 100px;
+	}
+    table.table-striped tbody tr:nth-of-type(odd) {
+    	background-color: #fcfcfc;
+	}
+	table.table-striped.table-hover tbody tr:hover {
+		background: #f5f5f5;
+	}
+    table.table th i {
+        font-size: 13px;
+        margin: 0 5px;
+        cursor: pointer;
+    }	
+    table.table td:last-child i {
+		opacity: 0.9;
+		font-size: 22px;
+        margin: 0 5px;
+    }
+	table.table td a {
+		font-weight: bold;
+		color: #566787;
+		display: inline-block;
+		text-decoration: none;
+		outline: none !important;
+	}
+	table.table td a:hover {
+		color: #2196F3;
+	}
+	table.table td a.edit {
+        color: #FFC107;
+    }
+    table.table td a.delete {
+        color: #F44336;
+    }
+    table.table td i {
+        font-size: 19px;
+    }
+	table.table .avatar {
+		border-radius: 50%;
+		vertical-align: middle;
+		margin-right: 10px;
+	}
+    .pagination {
+        float: right;
+        margin: 0 0 5px;
+    }
+    .pagination li a {
+        border: none;
+        font-size: 13px;
+        min-width: 30px;
+        min-height: 30px;
+        color: #999;
+        margin: 0 2px;
+        line-height: 30px;
+        border-radius: 2px !important;
+        text-align: center;
+        padding: 0 6px;
+    }
+    .pagination li a:hover {
+        color: #666;
+    }	
+    .pagination li.active a, .pagination li.active a.page-link {
+        background: #03A9F4;
+    }
+    .pagination li.active a:hover {        
+        background: #0397d6;
+    }
+	.pagination li.disabled i {
+        color: #ccc;
+    }
+    .pagination li i {
+        font-size: 16px;
+        padding-top: 6px
+	}
+	.page-inactive {
+		display: none;
+	}
+	.page-link-inactive {
+		display: none;
+	}
+    .hint-text {
+        float: left;
+        margin-top: 10px;
+        font-size: 13px;
+    }    
+	/* Custom checkbox */
+	.custom-checkbox {
+		position: relative;
+	}
+	.custom-checkbox input[type="checkbox"] {    
+		opacity: 0;
+		position: absolute;
+		margin: 5px 0 0 3px;
+		z-index: 9;
+	}
+	.custom-checkbox label:before{
+		width: 18px;
+		height: 18px;
+	}
+	.custom-checkbox label:before {
+		content: '';
+		margin-right: 10px;
+		display: inline-block;
+		vertical-align: text-top;
+		background: white;
+		border: 1px solid #bbb;
+		border-radius: 2px;
+		box-sizing: border-box;
+		z-index: 2;
+	}
+	.custom-checkbox input[type="checkbox"]:checked + label:after {
+		content: '';
+		position: absolute;
+		left: 6px;
+		top: 3px;
+		width: 6px;
+		height: 11px;
+		border: solid #000;
+		border-width: 0 3px 3px 0;
+		transform: inherit;
+		z-index: 3;
+		transform: rotateZ(45deg);
+	}
+	.custom-checkbox input[type="checkbox"]:checked + label:before {
+		border-color: #03A9F4;
+		background: #03A9F4;
+	}
+	.custom-checkbox input[type="checkbox"]:checked + label:after {
+		border-color: #fff;
+	}
+	.custom-checkbox input[type="checkbox"]:disabled + label:before {
+		color: #b8b8b8;
+		cursor: auto;
+		box-shadow: none;
+		background: #ddd;
+	}
+	/* Modal styles */
+	.modal .modal-dialog {
+		width: 400px;
+	}
+	.modal .modal-header, .modal .modal-body, .modal .modal-footer {
+		padding: 20px 30px;
+	}
+	.modal .modal-content {
+		border-radius: 3px;
+	}
+	.modal .modal-footer {
+		background: #ecf0f1;
+		border-radius: 0 0 3px 3px;
+	}
+    .modal .modal-title {
+        display: inline-block;
+    }
+	.modal .form-control {
+		border-radius: 2px;
+		box-shadow: none;
+		border-color: #dddddd;
+	}
+	.modal textarea.form-control {
+		resize: vertical;
+	}
+	.modal .btn {
+		border-radius: 2px;
+		min-width: 100px;
+	}	
+	.modal form label {
+		font-weight: normal;
+	}
+	/* The switch - the box around the slider */
+	.switch {
+		position: relative;
+		display: inline-block;
+		width: 60px;
+		height: 34px;
+	}
+	/* Hide default HTML checkbox */
+	.switch input {
+		opacity: 0;
+		width: 0;
+		height: 0;
+	}
+	/* The slider */
+	.slider {
+		position: absolute;
+		cursor: pointer;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: #ccc;
+		-webkit-transition: .4s;
+		transition: .4s;
+	}
+	.slider:before {
+		position: absolute;
+		content: "";
+		height: 26px;
+		width: 26px;
+		left: 4px;
+		bottom: 4px;
+		background-color: white;
+		-webkit-transition: .4s;
+		transition: .4s;
+	}
+
+	input:checked + .slider {
+		background-color: #2196F3;
+	}
+	input:focus + .slider {
+		box-shadow: 0 0 1px #2196F3;
+	}
+	input:checked + .slider:before {
+		-webkit-transform: translateX(26px);
+		-ms-transform: translateX(26px);
+		transform: translateX(26px);
+	}
+	/* Rounded sliders */
+	.slider.round {
+		border-radius: 34px;
+	}
+	.slider.round:before {
+		border-radius: 50%;
+	}
+	.dot {
+		height: 25px;
+		width: 25px;
+		background-color: #bbb;
+		border-radius: 50%;
+		display: inline-block;
+	}
+	.small-dot {
+		height: 15px;
+		width: 15px;
+		background-color: #bbb;
+		border-radius: 50%;
+		display: inline-block;
+	}
+	/* Hide scrollbar for Chrome, Safari and Opera */
+	.scrollbar-hide::-webkit-scrollbar {
+		display: none;
+	}
+
+	/* Hide scrollbar for IE, Edge and Firefox */
+	.scrollbar-hide {
+		-ms-overflow-style: none;  /* IE and Edge */
+		scrollbar-width: none;  /* Firefox */
+	}
+
+	.my-tooltip {
+		position: relative;
+	}
+
+	.my-tooltip:hover::after {
+		position: absolute;
+		content: attr(data-tooltip);
+		bottom: -1.75em;
+		/* right: -1em; */
+		background-color: #333;
+		color: white;
+		padding: .25em .5em;
+	}
+
+	@media (min-width: 768px) {
+		.fixed-posi {
+			width: 50%;
+			margin-left: 50%;
+			min-height:100%;
+			position:fixed;
+		}
+	}
+
+    img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .on {
+        background-color: #2196F3;
+    }
+
+    .off {
+        background-color: #ccc;
+    }
+
+	
+
+
+
+
+
+	/*
+		DEMO STYLE
+	*/
+
+	@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+	/* body {
+		font-family: 'Poppins', sans-serif;
+		background: #fafafa;
+	}
+
+	p {
+		font-family: 'Poppins', sans-serif;
+		font-size: 1.1em;
+		font-weight: 300;
+		line-height: 1.7em;
+		color: #999;
+	} */
+
+	a,
+	a:hover,
+	a:focus {
+		color: inherit;
+		text-decoration: none;
+		transition: all 0.3s;
+	}
+
+	.navbar {
+		/* padding: 15px 10px; */
+		/* background: #fff; */
+		border: none;
+		border-radius: 0;
+		/* margin-bottom: 40px; */
+		box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+	}
+
+	.navbar-btn {
+		box-shadow: none;
+		outline: none !important;
+		border: none;
+	}
+
+	.line {
+		width: 100%;
+		height: 1px;
+		border-bottom: 1px dashed #ddd;
+		margin: 40px 0;
+	}
+
+	/* ---------------------------------------------------
+		SIDEBAR STYLE
+	----------------------------------------------------- */
+
+	.wrapper {
+		display: flex;
+		width: 100%;
+	}
+
+	#sidebar {
+		width: 250px;
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 100vh;
+		z-index: 999;
+		background: #7386D5;
+		color: #fff;
+		transition: all 0.3s;
+	}
+
+	#sidebar.active {
+		margin-left: -250px;
+	}
+
+	#sidebar .sidebar-header {
+		padding: 20px;
+		background: #6d7fcc;
+	}
+
+	#sidebar ul.components {
+		padding: 20px 0;
+		border-bottom: 1px solid #47748b;
+	}
+
+	#sidebar ul p {
+		color: #fff;
+		padding: 10px;
+	}
+
+	#sidebar ul li a {
+		padding: 10px;
+		font-size: 1.1em;
+		display: block;
+	}
+
+	#sidebar ul li a:hover {
+		color: #7386D5;
+		background: #fff;
+	}
+
+	#sidebar ul li.active>a,
+	a[aria-expanded="true"] {
+		color: #fff;
+		background: #6d7fcc;
+	}
+
+	a[data-toggle="collapse"] {
+		position: relative;
+	}
+
+	.dropdown-toggle::after {
+		display: block;
+		position: absolute;
+		top: 50%;
+		right: 20px;
+		transform: translateY(-50%);
+	}
+
+	ul ul a {
+		font-size: 0.9em !important;
+		padding-left: 30px !important;
+		background: #6d7fcc;
+	}
+
+	ul.CTAs {
+		padding: 20px;
+	}
+
+	ul.CTAs a {
+		text-align: center;
+		font-size: 0.9em !important;
+		display: block;
+		border-radius: 5px;
+		margin-bottom: 5px;
+	}
+
+	a.download {
+		background: #fff;
+		color: #7386D5;
+	}
+
+	a.article,
+	a.article:hover {
+		background: #6d7fcc !important;
+		color: #fff !important;
+	}
+
+	/* ---------------------------------------------------
+		CONTENT STYLE
+	----------------------------------------------------- */
+
+	#content {
+		width: calc(100% - 250px);
+		/* padding: 40px; */
+		min-height: 100vh;
+		transition: all 0.3s;
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+
+	#content.active {
+		width: 100%;
+	}
+
+	/* ---------------------------------------------------
+		MEDIAQUERIES
+	----------------------------------------------------- */
+
+	/* @media (max-width: 768px) {
+		#sidebar {
+			margin-left: -250px;
+		}
+		#sidebar.active {
+			margin-left: 0;
+		}
+		#content {
+			width: 100%;
+		}
+		#content.active {
+			width: calc(100% - 250px);
+		}
+		#sidebarCollapse span {
+			display: none;
+		}
+	} */
+
+    {% block style %}{% endblock %}
+</style>
+</head>
+<body style="overflow-x: ;">
+	<div class="wrapper">
+		<!-- Sidebar -->
+		<nav id="sidebar" class="active">
+			<div class="sidebar-header">
+				<h3>Bootstrap Sidebar</h3>
+			</div>
+	
+			<ul class="list-unstyled components">
+				<p>Dummy Heading</p>
+				<li class="active">
+					<a href="#devicesSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Devices</a>
+					<ul class="collapse list-unstyled" id="devicesSubmenu">
+						<!-- <li>
+							<a href="#">Home 1</a>
+						</li>
+						<li>
+							<a href="#">Home 2</a>
+						</li>
+						<li>
+							<a href="#">Home 3</a>
+						</li> -->
+					</ul>
+				</li>
+				<li>
+					<a href="#">About</a>
+				</li>
+				<li>
+					<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Pages</a>
+					<ul class="collapse list-unstyled" id="pageSubmenu">
+						<li>
+							<a href="#">Page 1</a>
+						</li>
+						<li>
+							<a href="#">Page 2</a>
+						</li>
+						<li>
+							<a href="#">Page 3</a>
+						</li>
+					</ul>
+				</li>
+				<li>
+					<a href="#">Portfolio</a>
+				</li>
+				<li>
+					<a href="#">Contact</a>
+				</li>
+			</ul>
+	
+		</nav>
+
+		<div id="content" class="active">
+			<nav class="navbar navbar-default nav-menu">
+				<div class="navbar-header">
+					<button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".button-menu">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" id="sidebarCollapse" href="#"><i class="fa fa-align-left"></i>Trabajo Profesional</a>
+					<!-- <button type="button" id="sidebarCollapse" class="btn btn-info">
+						<i class="material-icons dp48">dehaze</i>
+					</button> -->
+				</div>
+				
+				<div class="collapse navbar-collapse button-menu">
+					<ul class="nav navbar-nav ">
+						<li><a href="{% url 'user_dashboard' %}"><i class="fa fa-home"></i> HOME</a></li>
+						<!-- <li><a href="#">BILLER</a></li>
+						<li><a href="#">USERS</a></li>
+						<li><a href="#">OFFICES</a></li> -->
+					</ul>
+					
+					<ul class="nav navbar-nav navbar-right">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<span class="glyphicon glyphicon-user"></span> 
+								<strong>{{user.username}}</strong>
+								<span class="glyphicon glyphicon-chevron-down"></span>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<div class="navbar-login">
+										<div class="row">
+											<div class="col-lg-4">
+												<p class="text-center">
+													<span class="glyphicon glyphicon-user icon-size"></span>
+												</p>
+											</div>
+											<div class="col-lg-8">
+												<p class="text-left"><strong>{{user.username}}</strong></p>
+												<p class="text-left small">{{user.email}}</p>
+												<p class="text-left">
+													<a class="btn btn-primary btn-block btn-sm" onclick="logout()">Logout</a>
+												</p>
+											</div>
+										</div>
+									</div>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<div class="navbar-login navbar-login-session">
+										<div class="row">
+											<div class="col-lg-12">
+												<p>
+													<a href="#" class="btn btn-primary btn-block">My Profile</a>
+													<a href="#" class="btn btn-danger btn-block">Change Password</a>
+												</p>
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</nav>
+			
+			{% block content %}{% endblock %}
+
+		</div>
+
+	
+	</div>
+
+	
+</body>
+<script>
+	var logout_url = "{% url 'logout' %}";
+	var authentication_home_url = "{% url 'home' %}";
+	var get_devices_url = "{% url 'get_devices' %}";
+	
+	$(document).ready(function () {
+
+		$("#sidebar").mCustomScrollbar({
+			theme: "minimal"
+		});
+
+		$('#sidebarCollapse').on('click', function () {
+			// open or close navbar
+			$('#sidebar, #content').toggleClass('active');
+			// close dropdowns
+			$('.collapse.in').toggleClass('in');
+			// and also adjust aria-expanded attributes we use for the open/closed arrows
+			// in our CSS
+			$('a[aria-expanded=true]').attr('aria-expanded', 'false');
+		});
+
+		get_devices();
+
+	});
+
+	function logout() {
+		$.ajax({
+			url: logout_url,
+			type: 'GET'
+		}).done(function(data, textStatus, xhr) {
+			if (xhr.status !== 200)
+				alert(JSON.stringify(data));
+			window.location.href = authentication_home_url
+		}).fail(function(xhr, status, error) {
+			alert(error);
+		});
+	}
+
+	/**
+	 * @param {String} HTML representing a single element
+	 * @return {Element}
+	 */
+	function htmlToElement(html) {
+		var template = document.createElement('template');
+		html = html.trim(); // Never return a text node of whitespace as the result
+		template.innerHTML = html;
+		return template.content.firstChild;
+	}
+	
+	function get_devices() {
+		$.ajax({
+			url: get_devices_url,
+			type: 'GET'
+		}).done(function(data, textStatus, xhr) {
+			if (xhr.status !== 200)
+				alert(JSON.stringify(data));
+			
+			let devices_submenu = document.getElementById('devicesSubmenu');
+
+			data.devices.forEach(device => {
+				let device_dashboard_url = "{% url 'device_dashboard' 123 %}".replace('123', device.id);
+				devices_submenu.appendChild(htmlToElement(`
+					<li>
+						<a href="${device_dashboard_url}">${device.name !== null ? device.name : device.id}</a>
+					</li>
+				`));
+			})
+			
+		}).fail(function(xhr, status, error) {
+			alert(error);
+		});
+	}
+
+    {% block script %}{% endblock %}
+</script>
+</html>

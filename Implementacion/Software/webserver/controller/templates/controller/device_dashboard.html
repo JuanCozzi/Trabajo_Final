@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}Device dashboard{% endblock %}
+
+{% block included_scripts %}
+{% load static %}
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<!-- <script src="https://d3js.org/d3.v5.min.js"></script> -->
+	<script src="{% static 'controller/thermometer.js' %}"></script>
+	<script src="{% static 'controller/device_dashboard.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-sm-6 scrollbar-hide" style="height: 100vh; overflow-y: scroll;">
+			<div class="row text-center" style="background: #f5f5f5; position: sticky; z-index: 1; top: 0;padding-bottom: 1em; padding-top: 1em;">
+				<h3>
+					Outputs Control
+					<a href="" class="edit" data-toggle="modal" id="outputsManage">
+						<i class="material-icons" data-toggle="Tooltip" title="Manage outputs">&#xE254;</i>
+					</a>
+				</h3>
+			</div>
+
+			<div class="row text-center" id="outputsStatus" style="z-index:0;"></div>
+			
+			
+		</div>
+		
+		<!-- <div class="col-sm-6 col-sm-offset-6 fixed-posi"> -->
+		<div class="col-sm-6">
+			<div class="row text-center" style="padding-bottom: 1em; padding-top: 1em;">
+				<h3>Temperature Control</h3>
+			</div>
+			<div class="row text-center" style="padding-bottom: 3em; padding-top: 1em;">
+				<div>
+					<h5>
+						Desired temperature: <label id="setTemperature"></label>
+						<a href="#editTempModal" id="editTemp" class="edit" data-toggle="modal">
+							<i class="material-icons" data-toggle="Tooltip" onclick="editTemperaturePrepare()" title="Edit">&#xE254;</i>
+						</a>
+					</h5>
+				</div>
+			</div>
+			<div class="row text-center">
+				<div class="col-sm-6" style="padding-left: 0; padding-right: 0;">
+					<div id="thermometer1"></div>
+				</div>
+				<div class="col-sm-6" style="padding-left: 0; padding-right: 0;">
+					<div id="thermometer2"></div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+
+	<!-- Edit Modal HTML -->
+	<div id="editTempModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- <form> -->
+					<div class="modal-header">
+						<h4 class="modal-title">Change desired temperature</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label>Current temperature: <span id="currentTemperature"></span></label>
+						</div>
+						<div class="form-group">
+							<label>New temperature</label>
+							<input type="text" class="form-control" id="newTemperature" required>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+						<input type="submit" class="btn btn-info" data-dismiss="modal" value="Save" id="editTemperature">
+					</div>
+				<!-- </form> -->
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{% block script %}
+	// var chartObj;
+	// FusionCharts.ready(function(){
+	// 		chartObj = new FusionCharts({
+	// 			type: 'thermometer',
+	// 			renderAt: 'chart-container',
+	// 			width: '240',
+	// 			height: '500',
+	// 			dataFormat: 'json',
+	// 			dataSource: {
+	// 				"chart": {
+	// 					"caption": "Temperature Monitor",
+	// 					"subcaption": " Device thermometer 1",
+	// 					"lowerLimit": "-10",
+	// 					"upperLimit": "50",
+
+	// 					"decimals": "1",
+	// 					"numberSuffix": "°C",
+	// 					"showhovereffect": "1",
+	// 					"thmFillColor": "#008ee4",
+	// 					"showGaugeBorder": "1",
+	// 					"gaugeBorderColor": "#008ee4",
+	// 					"gaugeBorderThickness": "2",
+	// 					"gaugeBorderAlpha": "30",
+	// 					"thmOriginX": "100",
+	// 					"chartBottomMargin": "20",
+	// 					"valueFontColor": "#000000",
+	// 					"theme": "fusion"
+	// 				},
+	// 				"value": "0",
+	// 				//All annotations are grouped under this element
+	// 				"annotations": {
+	// 					"showbelow": "0",
+	// 					"groups": [{
+	// 						//Each group needs a unique ID
+	// 						"id": "indicator",
+	// 						"items": [
+	// 							//Showing Annotation
+	// 							{
+	// 								"id": "background",
+	// 								//Rectangle item
+	// 								"type": "rectangle",
+	// 								"alpha": "50",
+	// 								"fillColor": "#AABBCC",
+	// 								"x": "$gaugeEndX-60",
+	// 								"tox": "$gaugeEndX",
+	// 								"y": "$gaugeEndY+100",
+	// 								"toy": "$gaugeEndY+120"
+	// 							},
+	// 							//Showing Annotation
+	// 							{
+	// 								"id": "temperature",
+	// 								"text": "0 ºC",
+	// 								"color": "#000000",
+	// 								//Rectangle item
+	// 								"type": "text",
+	// 								"x": "$gaugeEndX-30",
+	// 								"y": "$gaugeEndY+110"
+	// 							}
+	// 						]
+	// 					}]
+
+	// 				},
+	// 			},
+	// 			"events": {
+	// 				"rendered": function(evt, arg) {
+	// 					evt.sender.updateAnnotation = function(evtObj, argObj) {
+	// 						console.log('ACAA')
+	// 						var code,
+	// 							chartObj = evtObj.sender,
+	// 							val = chartObj.getData(),
+	// 							annotations = chartObj.annotations;
+
+	// 						if (val >= 40) {
+	// 							code = "#ff0000";
+	// 						} else if (val >= 30 && val < 40) {
+	// 							code = "#ff9900";
+	// 						} else {
+	// 							code = "#00FF00";
+	// 						}
+	// 						annotations.update("background", {
+	// 							"fillColor": code
+	// 						});
+	// 						annotations.update("temperature", {
+	// 							"text": `${val} ºC`
+	// 						});
+	// 					};
+	// 				},
+	// 				'renderComplete': function(evt, arg) {
+	// 					evt.sender.updateAnnotation(evt, arg);
+	// 				},
+	// 				'realtimeUpdateComplete': function(evt, arg) {
+	// 					evt.sender.updateAnnotation(evt, arg);
+	// 				},
+	// 				'disposed': function(evt, arg) {
+	// 					clearInterval(evt.sender.dataUpdate);
+	// 				}
+	// 			}
+	// 		});
+	// 		chartObj.render();
+	// 	});
+	
+	var device_id = "{{device_id}}"
+	var get_device_config_url = "{% url 'get_config' 123 %}".replace('123', device_id)
+	var manage_outputs_url = "{% url 'manage_outputs' 123 %}".replace('123', device_id)
+    // document.getElementById('configure_output').addEventListener('click', function() {
+    //     fetch('http://127.0.0.1:8000/controller/configure/output/', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Content-type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             'device_id': 0,
+    //             'output_number': 1,
+    //             'time_on': 0
+    //         })
+    //     })
+    //     .then(function(response) {
+    //         return response.json();
+    //     })
+    //     .then(function(data) {
+    //         console.log(data)
+    //     })
+    // })
+{% endblock %}
