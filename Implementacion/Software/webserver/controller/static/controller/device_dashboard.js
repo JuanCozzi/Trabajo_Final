@@ -219,7 +219,7 @@ function getDeviceConfig() {
 
             row.appendChild(htmlToElement(`
                 <div class="row">
-                    <h5>Output ${output.Output}</h5>
+                    <h5>Output ${output.Output}${output.Name !== null ? ' - ' + output.Name : ''}</h5>
                 </div>
             `))
             
