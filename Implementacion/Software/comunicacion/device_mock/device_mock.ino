@@ -45,8 +45,8 @@
 
 using namespace websockets;
 
-const char *ssid = "Fibertel WiFi360 2.4GHz";  // Network
-const char *password = "0041697312"; // Network's password
+const char *ssid = "";  // Network
+const char *password = ""; // Network's password
 
 const char *device_id = "pd1";
 const char *device_password = "qwertyas";
@@ -64,6 +64,7 @@ WebsocketsClient ws_client;
 
 ESP8266WiFiMulti wifiMulti;
 
+bool authenticated = false;
 bool websocket_connected = false;
 
 bool get_cookie_value(const String &cookies, const String &id, String &value) {
@@ -192,11 +193,7 @@ void onMessageCallback(WebsocketsMessage msg){
   }
 }
 
-void setup(void){
-  Serial.begin(115200);         // Start the Serial communication to send messages to the computer
-  delay(10);
-  Serial.println('\n');
-
+void wifi_connect() {
   Serial.println("Connecting to ");
   Serial.println(ssid);
 
@@ -210,10 +207,17 @@ void setup(void){
   }
   Serial.println("");
   Serial.println("WiFi connected");
+}
 
+void websocket_connect() {
+  ws_client.addHeader("Cookie", session_id);
+  websocket_connected = ws_client.connect("http://181.171.18.228:8000/ws/controller/device");
+  // Serial.println("Estoy conectado?");
+  // Serial.println(websocket_connected);
+}
 
-
-
+void authenticate() {
+  // create JSON body with credentials
   StaticJsonDocument<AUTHENTICATION_JSON_SIZE> doc;
   doc["username"] = device_id;
   doc["password"] = device_password;
@@ -225,23 +229,27 @@ void setup(void){
   serializeJson(doc, authentication_body, measureJson(doc) + 1);
   Serial.println(authentication_body);
 
-
-
+  // make authentication request
   HTTPClient http;    //Declare object of class HTTPClient
   
   //Post Data
-  
-  http.begin(client, "http://181.171.18.228:8000/accounts/login/");              //Specify request destination
+  http.begin(client, "http://181.171.18.228:8000/accounts/login/"); //Specify request destination
   http.collectHeaders(header_keys, header_keys_num);
   http.addHeader("Content-Type", "application/json");
 
-  // int httpCode = http.POST("{\"username\": \"pd1\", \"password\": \"qwertyas\"}");   //Send the request
-  int httpCode = http.POST(authentication_body);   //Send the request
+  int http_code = http.POST(authentication_body);   //Send the request
   String payload = http.getString();    //Get the response payload
 
-  Serial.println(httpCode);   //Print HTTP return code
+  Serial.println(http_code);   //Print HTTP return code
   Serial.println(payload);    //Print request response payload
   Serial.println(payload.length());
+
+  if (http_code <= 0) {
+    authenticated = false;
+    Serial.print("Error authenticating ");
+    Serial.println(http_code);
+    return;
+  }
 
   String cookies_header = http.header("Set-Cookie");
   Serial.println(cookies_header);
@@ -249,27 +257,40 @@ void setup(void){
   if (get_cookie_value(cookies_header, String("sessionid"), session_id)) {
     Serial.println("Cookie parsed");
     Serial.println(session_id);
+    authenticated = true;
+  } else {
+    authenticated = false;
+    Serial.println("Error parsing sessionid cookie");
   }
 
   http.end();  //Close connection
+}
 
+void setup(void) {
+  Serial.begin(115200);         // Start the Serial communication to send messages to the computer
+  delay(10);
+  Serial.println('\n');
 
+  wifi_connect();
 
+  authenticate();
 
+  // configure websocket
   ws_client.onEvent(onEventsCallback);
   ws_client.onMessage(onMessageCallback);
-  ws_client.addHeader("Cookie", session_id);
-  // ws_client.connect("http://ec2-18-220-192-186.us-east-2.compute.amazonaws.com:8000/controller/ws/device/0");
-  websocket_connected = ws_client.connect("http://181.171.18.228:8000/ws/controller/device");
+  
 }
 
 void loop(void){
   //ws_client.send("Holaaaaaaaaaa");
-  if (!websocket_connected)
+  if (!authenticated) {
+    Serial.println("Authenticating");
+    authenticate();
+  }
+  if (!websocket_connected && authenticated)
   {
     Serial.println("Trying to reconnect");
-    // ws_client.addHeader("Cookie", session_id);
-    websocket_connected = ws_client.connect("http://181.171.18.228:8000/ws/controller/device");
+    websocket_connect();    
   }
   if (ws_client.available())
   {
