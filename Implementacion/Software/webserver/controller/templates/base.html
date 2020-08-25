@@ -716,6 +716,8 @@
 
 	});
 
+	var socket;
+
 	function logout() {
 		$.ajax({
 			url: logout_url,
@@ -763,6 +765,55 @@
 			alert(error);
 		});
 	}
+
+	const status_codes = Object.freeze({
+		OK: 11,
+		MSG_FORMAT_ERROR: 12,
+		SYNTAX_ERROR: 13,
+		PARAMETER_SET_IN_SERVER_FAILED: 14,
+
+		TEMPERATURE_DEPENDENT_OUTPUT_ELECTRICALLY_ON: 51,
+		TEMPERATURE_DEPENDENT_OUTPUT_ELECTRICALLY_OFF: 52,
+
+		MANUAL_ON: 101,
+		TIME_ON: 102,
+
+		OUTPUT_MODIFICATION_FAILED_LEVEL: 111,
+		OUTPUT_MODIFICATION_FAILED_ON_TIME_SURPASSED: 112,
+		OUTPUT_MODIFICATION_FAILED_MAX_ENERGY_SURPASSED: 113,
+		OUTPUT_MODIFICATION_FAILED_ELECTRIC_FAILURE: 114,
+
+		OUTPUT_ADDED_BY_USER: 201,
+		OUTPUT_ADDED_CONFIRMED_BY_DEVICE: 202,
+		OUTPUT_DELETED_BY_USER: 203,
+		OUTPUT_DELETED_CONFIRMED_BY_DEVICE: 204,
+		OUTPUT_PARAMETERS_CHANGED_BY_USER: 205,
+		OUTPUT_PARAMETERS_CHANGED_CONFIRMED_BY_DEVICE: 206,
+		TEMPERATURE_SET_BY_USER: 207,
+		TEMPERATURE_CONFIRMED_BY_DEVICE: 208,
+
+		WORKING_TIME_AND_TEMPERATURE_GET_FROM_DEVICE: 211,
+		WORKING_TIME_AND_TEMPERATURE_GOT_FROM_DEVICE: 212,
+		ALL_PARAMETERS_GET_FROM_DEVICE: 213,
+		ALL_PARAMETERS_GOT_FROM_DEVICE: 214,
+	});
+
+	const output_status_msgs = Object.freeze({
+		[status_codes.OUTPUT_MODIFICATION_FAILED_LEVEL]: 'Output {output_number}: level condition failed, output turned off.',
+		[status_codes.OUTPUT_MODIFICATION_FAILED_ON_TIME_SURPASSED]: 'Output {output_number}: maximum continuous working time surpassed, output turned off.',
+		[status_codes.OUTPUT_MODIFICATION_FAILED_MAX_ENERGY_SURPASSED]: 'Output {output_number}: maximum energy consumption reached, output turned off.',
+		[status_codes.OUTPUT_MODIFICATION_FAILED_ELECTRIC_FAILURE]: 'Electric failure, all outputs turned off.',
+		[status_codes.OUTPUT_ADDED_BY_USER]: 'Device took too long to respond to the add output operation for output {output_number}.',
+		[status_codes.OUTPUT_DELETED_BY_USER]: 'Device took too long to respond to the delete output operation for output {output_number}.',
+		[status_codes.OUTPUT_PARAMETERS_CHANGED_BY_USER]: 'Device took too long to respond to the change output operation for output {output_number}.',
+		[status_codes.TEMPERATURE_SET_BY_USER]: 'Device took too long to respond to the set desired temperature operation for output {output_number}.',
+		[status_codes.TEMPERATURE_DEPENDENT_OUTPUT_ELECTRICALLY_ON]: 'Output {output_number}: electrically on.',
+		[status_codes.TEMPERATURE_DEPENDENT_OUTPUT_ELECTRICALLY_OFF]: 'Output {output_number}: electrically off.',
+		[status_codes.MANUAL_ON]: 'Output {output_number}: manual {status}.',
+		[status_codes.TIME_ON]: 'Output {output_number}: time {status}',
+	});
+
+	const device_response_timeout = 5000;
 
     {% block script %}{% endblock %}
 </script>

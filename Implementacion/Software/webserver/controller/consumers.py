@@ -93,10 +93,13 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
 
         device = self.scope['user']
         print('Usuario ', device)
+        print('Usuario is authenticated', device.is_authenticated)
+        print('Usuario is device', device.is_device)
 
         if device.is_authenticated and device.is_device:
 
             device_id = device.username
+            print('Device id ', device_id)
 
             await self.channel_layer.group_add('%s' % device_id, self.channel_name)
 
@@ -130,58 +133,102 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
         # from device messages
         if msg == status_codes.OUTPUT_ADDED_CONFIRMED_BY_DEVICE:
             # content['data']['ID'] = device_id
-            add_result = await self.add_output(device_id, content['data'])
-            response = {'msg': status_codes.OK if add_result else status_codes.PARAMETER_SET_IN_SERVER_FAILED}
+            add_result, errors = await self.add_output(device_id, content['data'])
+            response = {'msg': status_codes.OK}
+            if not add_result:
+                response['msg'] = status_codes.PARAMETER_SET_IN_SERVER_FAILED
+                response['data'] = errors
         elif msg == status_codes.OUTPUT_DELETED_CONFIRMED_BY_DEVICE:
-            update_result = await self.delete_output(device_id, content['data']['Output'])
-            response = {'msg': status_codes.OK if update_result else status_codes.PARAMETER_SET_IN_SERVER_FAILED}
+            update_result, errors = await self.delete_output(device_id, content['data']['Output'])
+            response = {'msg': status_codes.OK}
+            if not update_result:
+                response['msg'] = status_codes.PARAMETER_SET_IN_SERVER_FAILED
+                response['data'] = errors
         elif msg == status_codes.OUTPUT_PARAMETERS_CHANGED_CONFIRMED_BY_DEVICE:
             print('OUTPUT_PARAMETERS_CHANGED_CONFIRMED_BY_DEVICE message')
             # content['data']['ID'] = device_id
             print(content['data'])
-            update_result = await self.update_output(device_id, content['data'])
-            response = {'msg': status_codes.OK if update_result else status_codes.PARAMETER_SET_IN_SERVER_FAILED}
+            update_result, errors = await self.update_output(device_id, content['data'])
+            response = {'msg': status_codes.OK}
+            if not update_result:
+                response['msg'] = status_codes.PARAMETER_SET_IN_SERVER_FAILED
+                response['data'] = errors
             # await self.send_json({'msg': status_codes.OK if update_result else status_codes.PARAMETER_SET_IN_SERVER_FAILED})
         elif msg == status_codes.TEMPERATURE_CONFIRMED_BY_DEVICE:
-            update_result = await self.update_temperature(device_id, content['data']['SetTemp'])
-            response = {'msg': status_codes.OK if update_result else status_codes.PARAMETER_SET_IN_SERVER_FAILED}
+            update_result, errors = await self.update_temperature(device_id, content['data']['SetTemp'])
+            response = {'msg': status_codes.OK}
+            if not update_result:
+                response['msg'] = status_codes.PARAMETER_SET_IN_SERVER_FAILED
+                response['data'] = errors
             # await self.send_json({'msg': status_codes.OK if update_result else status_codes.PARAMETER_SET_IN_SERVER_FAILED})
         elif msg == status_codes.WORKING_TIME_AND_TEMPERATURE_GOT_FROM_DEVICE:
             response = content
         elif msg == status_codes.ALL_PARAMETERS_GOT_FROM_DEVICE:
             response = content
+        # VALE LA PENA INFORMARLOS CON UN ALERT???
         elif msg == status_codes.TEMPERATURE_DEPENDENT_OUTPUT_ELECTRICALLY_ON:
             content['data']['Status'] = DeviceOutput.STATUS_ON
             update_result = await self.update_output(device_id, content['data'])
-            response = {'msg': status_codes.OK if update_result else status_codes.PARAMETER_SET_IN_SERVER_FAILED}
+            if update_result:
+                response = {
+                    'data': {'Output': content['data']['Output']},
+                    'msg': status_codes.TEMPERATURE_DEPENDENT_OUTPUT_ELECTRICALLY_ON
+                }
+            else:
+                response = {'msg': status_codes.PARAMETER_SET_IN_SERVER_FAILED}
         elif msg == status_codes.TEMPERATURE_DEPENDENT_OUTPUT_ELECTRICALLY_OFF:
             content['data']['Status'] = DeviceOutput.STATUS_ON_ELECTRICALLY_OFF
             print(content['data'])
             update_result = await self.update_output(device_id, content['data'])
-            response = {'msg': status_codes.OK if update_result else status_codes.PARAMETER_SET_IN_SERVER_FAILED}
+            if update_result:
+                response = {
+                    'data': {'Output': content['data']['Output']},
+                    'msg': status_codes.TEMPERATURE_DEPENDENT_OUTPUT_ELECTRICALLY_OFF
+                }
+            else:
+                response = {'msg': status_codes.PARAMETER_SET_IN_SERVER_FAILED}
         elif msg == status_codes.MANUAL_ON:
             content['data']['Status'] = DeviceOutput.STATUS_ON if content['data']['Status'] else DeviceOutput.STATUS_OFF
             update_result = await self.update_output(device_id, content['data'])
-            response = {'msg': status_codes.OK if update_result else status_codes.PARAMETER_SET_IN_SERVER_FAILED}
+            if update_result:
+                response = {
+                    'data': {
+                        'Output': content['data']['Output'],
+                        'Status': content['data']['Status']
+                    },
+                    'msg': status_codes.MANUAL_ON
+                }
+            else:
+                response = {'msg': status_codes.PARAMETER_SET_IN_SERVER_FAILED}
         elif msg == status_codes.TIME_ON:
             content['data']['Status'] = DeviceOutput.STATUS_ON if content['data']['Status'] else DeviceOutput.STATUS_OFF
             update_result = await self.update_output(device_id, content['data'])
-            response = {'msg': status_codes.OK if update_result else status_codes.PARAMETER_SET_IN_SERVER_FAILED}
+            if update_result:
+                response = {
+                    'data': {
+                        'Output': content['data']['Output'],
+                        'Status': content['data']['Status']
+                    },
+                    'msg': status_codes.TIME_ON
+                }
+            else:
+                response = {'msg': status_codes.PARAMETER_SET_IN_SERVER_FAILED}
         elif msg == status_codes.OUTPUT_MODIFICATION_FAILED_LEVEL:
-            pass
+            response = content
         elif msg == status_codes.OUTPUT_MODIFICATION_FAILED_ON_TIME_SURPASSED:
-            pass
+            response = content
         elif msg == status_codes.OUTPUT_MODIFICATION_FAILED_MAX_ENERGY_SURPASSED:
-            pass
+            response = content
         elif msg == status_codes.OUTPUT_MODIFICATION_FAILED_ELECTRIC_FAILURE:
-            pass
+            response = content
         elif msg == status_codes.MSG_FORMAT_ERROR:
-            pass
+            response = content
         elif msg == status_codes.SYNTAX_ERROR:
-            return
+            response = content
         # else:
         #     response = content
 
+        print('RESPONSE ', response)
         await self.channel_layer.group_send(device_id, {
             'type': 'broadcast_message',
             'text': response,
@@ -197,10 +244,11 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
             # form = DeviceOutputForm(output_data)
         if form.is_valid():
             form.save()
-            return True
+            return True, None
         else:
             print(form.errors.get_json_data())
-            return False
+            print({field: errors[0]['message'] for field, errors in form.errors.get_json_data().items()})
+            return False, {field: errors[0]['message'] for field, errors in form.errors.get_json_data().items()}
 
 
     @database_sync_to_async
@@ -219,10 +267,10 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
             # form = DeviceOutputForm(output_data)
         if form.is_valid():
             form.save()
-            return True
+            return True, None
         else:
             print(form.errors.get_json_data())
-            return False
+            return False, {field: errors[0]['message'] for field, errors in form.errors.get_json_data().items()}
 
             
     @database_sync_to_async
@@ -349,7 +397,11 @@ class UserConsumer(AsyncJsonWebsocketConsumer):
                 response = content
             else:
                 print('ADD errors ', await sync_to_async(form.errors.get_json_data)())
-                response = {'msg': status_codes.MSG_FORMAT_ERROR}
+                errors = await sync_to_async(form.errors.get_json_data)()
+                response = {
+                    'data': {field.capitalize() if field != '__all__' else 'General': errors[0]['message'] for field, errors in errors.items()},
+                    'msg': status_codes.MSG_FORMAT_ERROR
+                }
         elif msg == status_codes.OUTPUT_DELETED_BY_USER:
             response = content
         elif msg == status_codes.OUTPUT_PARAMETERS_CHANGED_BY_USER:
@@ -366,7 +418,11 @@ class UserConsumer(AsyncJsonWebsocketConsumer):
                 response = content
             else:
                 print('UPDATE errors ', await sync_to_async(form.errors.get_json_data)())
-                response = {'msg': status_codes.MSG_FORMAT_ERROR}
+                errors = await sync_to_async(form.errors.get_json_data)()
+                response = {
+                    'data': {field.capitalize() if field != '__all__' else 'General': errors[0]['message'] for field, errors in errors.items()},
+                    'msg': status_codes.MSG_FORMAT_ERROR
+                }
         elif msg == status_codes.TEMPERATURE_SET_BY_USER:
             response = content
         elif msg == status_codes.WORKING_TIME_AND_TEMPERATURE_GET_FROM_DEVICE:

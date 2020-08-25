@@ -19,22 +19,42 @@ document.addEventListener('DOMContentLoaded', function() {
         // data = JSON.parse(JSON.parse(e.data))
         data = JSON.parse(e.data)
         console.log('message data', data)
-        // EN REALIDAD ESTO NO VA A ESTAR
-        // if (data.msg === 201) {
-        //     data.msg = 202;
-        //     socket.send(JSON.stringify(data))
-        // } else if (data.msg === 203) {
-        //     data.msg = 204;
-        //     socket.send(JSON.stringify(data))
-        // } else if (data.msg === 11) {
-        //     getDeviceConfig();
-        //     $('#addOutputModal').modal('hide');
-        //     $('#editOutputModal').modal('hide');
-        // }
-        if (data.msg === 11) {
-            getDeviceConfig();
-            $('#addOutputModal').modal('hide');
-            $('#editOutputModal').modal('hide');
+        
+        switch (data.msg) {
+            case status_codes.OK:
+                getDeviceConfig();
+                $('#addOutputModal').modal('hide');
+                $('#editOutputModal').modal('hide');
+                window.clearTimeout(addResponseTimeout);
+                window.clearTimeout(editResponseTimeout);
+                window.clearTimeout(deleteResponseTimeout);
+                break;
+            case status_codes.MSG_FORMAT_ERROR:
+                let errors = '';
+                Object.entries(data.data).forEach(([field, error]) => {
+                    errors += `${field}: ${error}\n`
+                })
+                alert(`The following errors were detected:\n${errors}`);
+                break;
+            case status_codes.OUTPUT_MODIFICATION_FAILED_LEVEL:
+            case status_codes.OUTPUT_MODIFICATION_FAILED_ON_TIME_SURPASSED:
+            case status_codes.OUTPUT_MODIFICATION_FAILED_MAX_ENERGY_SURPASSED:
+                alert(output_status_msgs[data.msg].replace('{output_number}', data.data.Output));
+                break;
+            case status_codes.OUTPUT_MODIFICATION_FAILED_ELECTRIC_FAILURE:
+                alert(output_status_msgs[data.msg]);
+                break;
+            case status_codes.TEMPERATURE_DEPENDENT_OUTPUT_ELECTRICALLY_ON:
+            case status_codes.TEMPERATURE_DEPENDENT_OUTPUT_ELECTRICALLY_OFF:
+                alert(output_status_msgs[data.msg].replace('{output_number}', data.data.Output));
+                getDeviceConfig();
+                break;
+            case status_codes.MANUAL_ON:
+            case status_codes.TIME_ON:
+                alert(output_status_msgs[data.msg].replace('{output_number}', data.data.Output)
+                    .replace('{status}', data.data.Status === 1 ? 'on' : 'off'));
+                    getDeviceConfig();
+                break;
         }
     }
     socket.onopen = function(e) {
@@ -49,11 +69,17 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-var socket;
+var addResponseTimeout;
+var editResponseTimeout;
+var deleteResponseTimeout;
 
 var status_on_color = "#2196F3";
 var status_off_color = "#ccc";
 var status_on_electrically_off_color = "#fb922f";
+
+function device_response_callback(operation_code, output_number) {
+    alert(output_status_msgs[operation_code].replace('{output_number}', output_number));
+}
 
 // var device_socket = new WebSocket('ws://127.0.0.1:8000/ws/controller/device/0')
 // var device_socket = new WebSocket(`ws://${window.location.host}/ws/controller/device/0`)
@@ -243,21 +269,13 @@ function addOutput() {
         'Status': status,
     }
 
-    socket.send(JSON.stringify({'data': output_data, 'msg': 201}))
+    addResponseTimeout = window.setTimeout(device_response_callback,
+                                           device_response_timeout,
+                                           status_codes.OUTPUT_ADDED_BY_USER,
+                                           output)
+    
+    socket.send(JSON.stringify({'data': output_data, 'msg': status_codes.OUTPUT_ADDED_BY_USER}))
 
-    // $.ajax({
-    //     url: 'https://m0nj6ki5jf.execute-api.us-west-2.amazonaws.com/prod/items',
-    //     type: 'POST',
-    //     data: JSON.stringify(output),
-    //     headers: {
-    //         'Authorization': token
-    //     }
-    // }).done(function(data) {
-    //     getDeviceConfig();
-    //     alert('Output successfully added.')
-    // }).fail(function(xhr, status, error) {
-    //     alert(error);
-    // });
     return false;
 }
 
@@ -381,7 +399,12 @@ function editOutput() {
         return;
     }    
 
-    socket.send(JSON.stringify({'data': output, 'msg': 205}))
+    editResponseTimeout = window.setTimeout(device_response_callback,
+                                            device_response_timeout,
+                                            status_codes.OUTPUT_PARAMETERS_CHANGED_BY_USER,
+                                            output.Output)
+    
+    socket.send(JSON.stringify({'data': output, 'msg': status_codes.OUTPUT_PARAMETERS_CHANGED_BY_USER}))
 
     // $.ajax({
     //     url: 'https://m0nj6ki5jf.execute-api.us-west-2.amazonaws.com/prod/items',
@@ -405,11 +428,16 @@ function deleteOutputPrepare(output_data) {
 }
 
 function deleteOutputs(output) {
+    deleteResponseTimeout = window.setTimeout(device_response_callback,
+                                              device_response_timeout,
+                                              status_codes.OUTPUT_DELETED_BY_USER,
+                                              output)
+
     socket.send(JSON.stringify({
         'data': {
             'ID': device_id,
             'Output': parseInt(output)
         },
-        'msg': 203
+        'msg': status_codes.OUTPUT_DELETED_BY_USER
     }))
 }

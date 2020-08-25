@@ -67,6 +67,18 @@ ESP8266WiFiMulti wifiMulti;
 bool authenticated = false;
 bool websocket_connected = false;
 
+size_t error_responses_num = 0;
+size_t error_response_codes[] = {
+  [0] = SHUNTDOWN_LEVEL,
+  [1] = SHUNTDOWN_TIME_ON,
+  [2] = SHUNTDOWN_TMAX,
+  [3] = SHUTDOWN_CURRENT_FAIL,
+  [4] = CONTROL_TEMP_ON,
+  [5] = CONTROL_TEMP_OFF,
+  [6] = MANUAL_OPERATION,
+  [7] = HOUR_OPERATION
+};
+
 bool get_cookie_value(const String &cookies, const String &id, String &value) {
   // const char *id_start = strstr(cookies.c_str(), id.c_str());
   // const char *value_start = id_start + id.length() + 1; // + 1 por el =
@@ -136,44 +148,31 @@ void onMessageCallback(WebsocketsMessage msg){
     case SHUTDOWN_CURRENT_FAIL:
       break;
     case REQUEST_ADD_OUTPUT:
-      doc["msg"] = RESPONSE_ADD_OUTPUT;
       response_needed = true;
       break; // keep going
     case RESPONSE_ADD_OUTPUT:
       break;
     case REQUEST_DELETE_OUTPUT:
-      doc["msg"] = RESPONSE_DELETE_OUTPUT;
       response_needed = true;
       break;
     case RESPONSE_DELETE_OUTPUT:
       break;
     case REQUEST_EDIT_PARAMETER:
-      doc["msg"] = RESPONSE_EDIT_PARAMETER;
       response_needed = true;
       break;
     case RESPONSE_EDIT_PARAMETER:
       break;
     case REQUEST_EDIT_TEMP:
-      doc["msg"] = RESPONSE_EDIT_TEMP;
       response_needed = true;
       break;
     case RESPONSE_EDIT_TEMP:
       break;
     case REQUEST_OPERATING_TIME:
-      doc["msg"] = RESPONSE_OPERATING_TIME;
-      doc["data"] = doc.createNestedObject();
-      doc["data"]["Temp"] = doc.createNestedObject();
-      doc["data"]["Temp"].add(23.5);
-      doc["data"]["Temp"].add(33.8);
-      doc["data"]["OperationTime"] = doc.createNestedObject();
-      for (size_t i = 0; i < 10; i++)
-        doc["data"]["OperationTime"].add((i + 1) * 10);
       response_needed = true;
       break;
     case RESPONSE_OPERATING_TIME:
       break;
     case REQUEST_ALL_PARAMETER:
-      doc["msg"] = RESPONSE_ALL_PARAMETER;
       response_needed = true;
       break;
     case RESPONSE_ALL_PARAMETER:
@@ -184,6 +183,15 @@ void onMessageCallback(WebsocketsMessage msg){
 
   if (response_needed)
   {
+    doc["msg"] = error_response_codes[(error_responses_num++) % 8];
+    doc["data"] = doc.createNestedObject();
+    doc["data"]["Output"] = 1;
+    switch (doc["msg"].as<int>()) {
+      case MANUAL_OPERATION:
+      case HOUR_OPERATION:
+        doc["data"]["Status"] = true;
+        break;
+    }
     Serial.println(doc.as<String>());
     char response[measureJson(doc) + 1];
     serializeJson(doc, response, measureJson(doc) + 1);
