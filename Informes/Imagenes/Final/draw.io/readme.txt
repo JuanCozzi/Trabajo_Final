@@ -1,1 +1,1 @@
-Abrir con extencion de chrome draw.io
+Abrir con extensión de chrome draw.io
