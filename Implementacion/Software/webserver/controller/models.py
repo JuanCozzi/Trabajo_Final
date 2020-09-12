@@ -60,6 +60,11 @@ class RangedFloatField(models.FloatField):
 
 
 class DeviceOutput(models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['device_id', 'output'], name='Unique Output per Device')
+        ]
+    
     device_id = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # device_id = models.ForeignKey(Device, on_delete=models.CASCADE, validators=[alphanumeric])
 
@@ -100,7 +105,7 @@ class DeviceOutput(models.Model):
     ]
 
     # output = models.IntegerField(primary_key=True, validators=[MinValueValidator(1), MaxValueValidator(MAX_OUTPUTS)])
-    output = RangedIntegerField(primary_key=True, min_value=MIN_OUTPUTS, max_value=MAX_OUTPUTS)
+    output = RangedIntegerField(min_value=MIN_OUTPUTS, max_value=MAX_OUTPUTS)
     name = models.CharField(_('Descriptive name'), max_length=150, null=True, blank=True)
     # tiempo que quiero que esté encendido
     time_on = RangedIntegerField(null=True, blank=True, default=0, min_value=MIN_TIME_ON, max_value=MAX_TIME_ON)

@@ -13,13 +13,19 @@ superuser = User.objects.create_superuser('admin', 'admin@admin.com', 'a')
 from accounts.forms import *
 
 form = CreateDeviceForm({'username': 'pd1', 'password1': 'qwertyas', 'password2': 'qwertyas'})
-device = save_form(form)
+device_1 = save_form(form)
+form = CreateDeviceForm({'username': 'tyWj5hd34k', 'password1': 'qwertyas', 'password2': 'qwertyas'})
+device_2 = save_form(form)
 form = CreateApplicationUserForm({'username': 'pau1', 'email': 'a@a.com', 'device_id': 'pd1', 'password1': 'qwertyas', 'password2': 'qwertyas'})
+save_form(form)
+form = CreateApplicationUserForm({'username': 'pau2', 'email': 'a@a.com', 'device_id': 'tyWj5hd34k', 'password1': 'qwertyas', 'password2': 'qwertyas'})
 save_form(form)
 
 from controller.models import DeviceOutputForm, DeviceTemperatureForm
 
-form = DeviceOutputForm({'device_id': device, 'output': 1})
+form = DeviceOutputForm({'device_id': device_1, 'output': 1})
+save_form(form)
+form = DeviceOutputForm({'device_id': device_2, 'output': 1})
 save_form(form)
 # form = DeviceTemperatureForm({'device_id': device, 'temperature': 25})
 # save_form(form)
