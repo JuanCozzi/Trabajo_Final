@@ -14,12 +14,12 @@
 		<div class="col-sm-3">
 		</div>
 		<div class="col-sm-6">
-			<div class="row text-center">
+			<div class="row text-center" style="margin-bottom: 50px;">
 				<h1>Devices available</h1>
 			</div>
 				
 				{% for user_device in user_devices %}
-					<div class="row">
+					<div class="row text-center">
 						<button type="button" class="btn btn-outline-primary" data-device-id="{{user_device.id}}"
 							onclick="deviceSelected(this.dataset.deviceId)">
 							{% if user_device.name is None %}
@@ -32,6 +32,11 @@
 							</span>
 							
 						</button>
+						<a href="#unlinkDeviceModal" class="delete" data-device-id="{{user_device.id}}"
+							data-device-name="{% if user_device.name is not None %}{{user_device.name}}{% endif %}" onclick="unlinkDevicePrepare(this.dataset)" data-toggle="modal">
+							<i class="material-icons" style="color: #F44336; vertical-align: middle;"
+								data-toggle="tooltip" title="Unlink">&#xE872;</i>
+						</a>
 					</div>
 				{% endfor %}
 			</div>
@@ -43,27 +48,22 @@
 
 
 
-	<!-- Edit Modal HTML -->
-	<div id="editTempModal" class="modal fade">
+	<!-- Unlink Device Modal HTML -->
+	<div id="unlinkDeviceModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<!-- <form> -->
 					<div class="modal-header">
-						<h4 class="modal-title">Change desired temperature</h4>
+						<h4 class="modal-title">Unlink Device</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					</div>
 					<div class="modal-body">
-						<div class="form-group">
-							<label>Current temperature: <span id="currentTemperature"></span></label>
-						</div>
-						<div class="form-group">
-							<label>New temperature</label>
-							<input type="text" class="form-control" id="newTemperature" required>
-						</div>
+						<p id="deviceUnlinkID"></p>
+						<p class="text-warning"><small>This action cannot be undone.</small></p>
 					</div>
 					<div class="modal-footer">
 						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-info" data-dismiss="modal" value="Save" id="editTemperature">
+						<input type="submit" class="btn btn-danger" data-dismiss="modal" value="Unlink" id="deviceUnlink" onclick="deviceUnlink(this.dataset.deviceId)">
 					</div>
 				<!-- </form> -->
 			</div>
@@ -82,4 +82,13 @@
 	{% endfor %}
 	var user_dashboard_url = "{% url 'user_dashboard' %}"
 	var device_dashboard_url = "{% url 'device_dashboard' 123 %}"
+
+	function unlinkDevicePrepare(device_data) {
+		document.querySelector('#deviceUnlinkID').innerHTML = `Are you sure you want to unlink device <b>${device_data.deviceName !== '' ? device_data.deviceName : device_data.deviceId}</b>? Device configuration will be lost.`;
+		document.querySelector('#deviceUnlink').dataset.deviceId = device_data.deviceId;
+	}
+
+	function deviceUnlink(device_id) {
+		console.log(device_id);
+	}
 {% endblock %}

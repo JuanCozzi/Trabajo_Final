@@ -1,16 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('registerButton').onclick = registerFieldsCheck;
     document.getElementById('loginButton').onclick = login;
 });
-
-
-$('#password1Register, #password2Register').on('keyup', function () {
-    if ($('#password1Register').val() === $('#password2Register').val())
-        $('#message').html('Matching').css('color', 'green');
-    else
-        $('#message').html('Password and confirmation must match').css('color', 'red');
-})
-
 
 function validPassword() {
     if ($('#password1Register').val() !== $('#password2Register').val())
@@ -19,26 +9,6 @@ function validPassword() {
     // validate password
         
     return true;
-}
-
-
-function registerFieldsCheck(e) {
-    e.preventDefault();
-
-    if (!validPassword())
-        return false;
-    
-    fetch('/accounts/register/', {
-        method: 'POST',
-        // headers: {
-        //     'Content-type': 'application/json'
-        // },
-        // body: JSON.stringify({
-        //     'email': ,
-        //     'password1': ,
-        //     'password2': ,
-        // })
-    })
 }
 
 function login(e) {

@@ -155,15 +155,17 @@ def manage_outputs(request, device_id):
 
     # device_id = request.GET.get('device_id')
     print('device_id ', device_id)
+    device = User.objects.get(username=device_id)
+    user_device = Device.objects.get(device=device)
 
     try:
-        outputs = DeviceOutput.objects.filter(device_id=User.objects.get(username=device_id))
+        outputs = DeviceOutput.objects.filter(device_id=device)
         for output in outputs:
             print(output)
     except DeviceOutput.DoesNotExist:
         outputs = None
 
-    return render(request, 'controller/manage_outputs.html', context={'device_id': device_id, 'outputs': outputs})
+    return render(request, 'controller/manage_outputs.html', context={'device_id': device_id, 'device_name': user_device.name, 'outputs': outputs})
 
 
 def get_config(request, device_id):

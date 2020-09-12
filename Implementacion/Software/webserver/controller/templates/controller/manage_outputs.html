@@ -8,21 +8,25 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container text-center">
         <div class="table-wrapper table-responsive">
         <!-- <div class="table-wrapper"> -->
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-4">
 						<h2>Manage <b>Outputs</b></h2>
-						<h2>Device {{device_id}}</h2>
+						<h2>Device 
+							<b>
+								{% if device_name is None %}
+									{{device_id}}
+								{% else %}
+									{{device_name}}
+								{% endif %}
+							</b>
+						</h2>
 					</div>
 					<div class="col-sm-8">
-						<a href="#signInModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE853;</i> <span>Sign in</span></a>
 						<a href="#addOutputModal" class="btn btn-success" data-toggle="modal" onclick="addOutputPrepare()"><i class="material-icons">&#xE147;</i> <span>Add New Output</span></a>
-						<a href="#deleteOutputsGroupModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						
-						<a class="btn btn-success" id="refreshOutputs"><i class="material-icons">&#xE5d5;</i></a>
-						<a class="btn btn-success" id="diffOutputs"><i class="material-icons">&#xE2c0;</i></a>
 					</div>
                 </div>
             </div>
@@ -35,16 +39,16 @@
 								<label for="selectAll"></label>
 							</span>
 						</th>
-                        <th>Number</th>
-                        <th>Name</th>
-                        <th>Hour on</th>
-						<th>Time on</th>
-						<th>Power</th>
-						<th>Energy max</th>
-						<th>Level</th>
-						<th>Force</th>
-						<th>Input dependency</th>
-						<th>Status</th>
+                        <th class="text-center">Number</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Hour on</th>
+						<th class="text-center">Time on</th>
+						<th class="text-center">Power</th>
+						<th class="text-center">Energy max</th>
+						<th class="text-center">Level</th>
+						<th class="text-center">Force</th>
+						<th class="text-center">Input dependency</th>
+						<th class="text-center">Status</th>
                     </tr>
                 </thead>
                 <tbody id="outputsTableBody">
