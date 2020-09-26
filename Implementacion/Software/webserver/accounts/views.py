@@ -5,6 +5,7 @@ from rest_framework import status
 
 # from .models import *
 from utils.utils import json_response
+from accounts.models import User, Device
 from .forms import CreateApplicationUserForm, CreateDeviceForm
 from .decorators import unauthenticated_user
 
@@ -30,23 +31,43 @@ def register_user(request):
         # data = request.POST
         print(data)
         data['device_id'] = request.user.username
-        application_user_form = CreateApplicationUserForm(data)
-        print(application_user_form.errors)
-        if application_user_form.is_valid():
-            # innecesario guardarlo en la variable user me parece
+        user_password = data.pop('password')
+        data['password1'] = user_password
+        data['password2'] = user_password
+        print('Data previous to form ', data)
+        # raise Exception('ACA')
+        if User.objects.filter(username=data['username']).exists():
+            print('Ya existe el usuario, agrego el dispositivo')
+            user = User.objects.get(username=data['username'])
+            # HAY QUE VALIDAR EL ID DEL DEVICE
             try:
-                application_user = application_user_form.save()            
+                Device.objects.create(user=user, device=User.objects.get(username=data['device_id']), name=data['device_name'])
+                return json_response(message=f'Now user {user.username} ' \
+                                        f'with email {user.email} is related to device {request.user.username}')
             except IntegrityError:
-                # Falló porque el dispositivo ya está asociado a otro usuario
-                # Revelar la información? O dar un mensaje de error sin el por qué
                 return json_response(message=f'Device registered for another user', status=status.HTTP_400_BAD_REQUEST)
+        else:
+            application_user_form = CreateApplicationUserForm(data)
+            print(application_user_form.errors)
+            if application_user_form.is_valid():
+                # innecesario guardarlo en la variable user me parece
+                # try:
+                application_user = application_user_form.save(device_name=data['device_name'])
+                # LA EXCEPCION NO APLICA, LO ESTOY RESOLVIENDO EN EL FORMULARIO EL CASO QUE EL DISPOSITIVO YA ESTE ASOCIADO A OTRO USUARIO
+                # except IntegrityError:
+                    # Falló porque el dispositivo ya está asociado a otro usuario
+                    # Revelar la información? O dar un mensaje de error sin el por qué
+                    # return json_response(message=f'Device registered for another user', status=status.HTTP_400_BAD_REQUEST)
 
-            return json_response(message=f'Created user {application_user.username}' \
-                                 f'with email {application_user.email}, related to device {request.user.username}')
+                return json_response(message=f'Created user {application_user.username} ' \
+                                    f'with email {application_user.email}, related to device {request.user.username}')
         print(application_user_form.errors.as_json())
         print(application_user_form.errors.get_json_data())
         # quizá hace falta setear escape_html=True en get_json_data
-        return json_response(body=application_user_form.errors.get_json_data(), status=status.HTTP_400_BAD_REQUEST)
+        errors = application_user_form.errors.get_json_data()
+        response = {field.capitalize() if field != '__all__' else 'General': errors[0]['message'] for field, errors in errors.items()}
+        # response = errors
+        return json_response(body=response, status=status.HTTP_400_BAD_REQUEST)
 
     return json_response(status=status.HTTP_404_NOT_FOUND)
 

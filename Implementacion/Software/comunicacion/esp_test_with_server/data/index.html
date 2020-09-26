@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NARO 24AC</title>
+    <style>
+        .container {
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                width: 750px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .container {
+                width: 970px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                width: 1170px;
+            }
+        }
+
+        .container .col {
+            /* background: lightblue; */
+        }
+
+        .container .col p {
+            padding: .25rem .75rem;
+        }
+
+
+        /* 2 columns (600px) */
+
+        @media only screen and (min-width:600px) {
+            .container .col {
+                float: left;
+                width: 50%;
+            }
+        }
+
+
+        /* 3 columns (768px) */
+
+        @media only screen and (min-width:768px) {
+            .container .col {
+                width: 33.333%;
+            }
+        }
+
+
+        /* 4 columns (992px) */
+
+        @media only screen and (min-width:992px) {
+            .container .col {
+                width: 25%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="col">
+            <br><br>
+            <button id="networkShowButton">Network</button>
+            <br><br>
+            <button id="userShowButton">Account</button>
+        </div>
+        
+        <div class="col" style="display: none;" id="networkDiv">
+            <label for="network">Network:</label>
+            <br>
+            <input type="text" id="network">
+            <br><br>
+            <label for="network_password">Password:</label>
+            <br>
+            <input type="password" id="network_password">
+            <br><br>
+            <button id="networkButton">Send</button>
+        </div>
+        <div class="col" style="display: none;" id="userDiv">
+            <label for="user_name">Username:</label>
+            <br>
+            <input type="text" id="user_name">
+            <br><br>
+            <label for="email">Email:</label>
+            <br>
+            <input type="email" id="email">
+            <br><br>
+            <label for="device_name">Device name:</label>
+            <br>
+            <input type="text" id="device_name">
+            <br><br>
+            <label for="user_password">Password:</label>
+            <br>
+            <input type="password" id="user_password">
+            <br><br>
+            <button id="userButton">Send</button>
+        </div>
+        <label id="wifiNetworkStatus"></label>
+        <br>
+        <label id="userStatus"></label>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        wifi_network_connected();
+        window.setInterval(wifi_network_connected, 10000);
+
+        document.querySelector('#network').value = 'Fibertel WiFi360 2.4GHz'
+        document.querySelector('#network_password').value = '0041697312'
+        document.querySelector('#user_name').value = 'example'
+        document.querySelector('#email').value = 'example@user.com'
+        document.querySelector('#device_name').value = 'Mi dispositivo'
+        document.querySelector('#user_password').value = 'qwertyas'
+
+        document.getElementById('networkShowButton').addEventListener('click', function() {
+            document.querySelector('#networkDiv').style.display = 'block';
+            document.querySelector('#userDiv').style.display = 'none';
+        })
+
+        document.getElementById('userShowButton').addEventListener('click', function() {
+            document.querySelector('#networkDiv').style.display = 'none';
+            document.querySelector('#userDiv').style.display = 'block';
+        })
+
+        document.getElementById('networkButton').addEventListener('click', function() {
+            fetch('/network', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'ssid': document.querySelector('#network').value,
+                    'password': document.querySelector('#network_password').value
+                    // 'ssid': 'Fibertel WiFi360 2.4GHz',
+                    // 'password': '0041697312'
+                })
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                console.log(data)
+            })
+
+            // fetch('http://192.168.4.1/network', {
+            //     method: 'GET'
+            // })
+            // .then(function(response) {
+            //     return response.json();
+            // })
+            // .then(function(data) {
+            //     console.log(data)
+            // })
+        })
+        document.getElementById('userButton').addEventListener('click', function() {
+            fetch('/user', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'username': document.querySelector('#user_name').value,
+                    'email': document.querySelector('#email').value,
+                    'device_name': document.querySelector('#device_name').value,
+                    'password': document.querySelector('#user_password').value
+                    // 'user_name': 'example',
+                    // 'email': 'example@email.com',
+                    // 'device_name': 'pd1',
+                    // 'password': 'qwertyas'
+                })
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                console.log(data)
+            })
+        })
+    })
+
+    function wifi_network_connected() {
+        fetch('/device/status', {
+            method: 'GET'
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data)
+            wifi_network_status = document.querySelector('#wifiNetworkStatus');
+            user_status = document.querySelector('#userStatus');
+            if (data.connected) {
+                wifi_network_status.innerText = `WiFi connected: ${data.ssid}`;
+                wifi_network_status.style.background = 'green';
+            } else {
+                wifi_network_status.innerText = `WiFi disconnected: ${data.ssid}`;
+                wifi_network_status.style.background = 'red';
+            }
+            if (data.device_associated) {
+                user_status.innerText = 'User linked';
+                user_status.style.background = 'green';
+            } else {
+                user_status.innerText = 'User not linked';
+                user_status.style.background = 'red';
+            }
+        })
+    }
+</script>
+</html>

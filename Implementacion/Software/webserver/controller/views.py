@@ -1,6 +1,7 @@
 from utils.utils import json_response
 from django.shortcuts import render
 from django.http import Http404
+import datetime
 
 
 TEST = {
@@ -125,7 +126,7 @@ from .models import *
 from accounts.models import *
 from controller import status_codes
 import json
-@csrf_exempt    
+@csrf_exempt
 def manage_outputs(request, device_id):
 
     if request.method == 'POST':
@@ -166,6 +167,35 @@ def manage_outputs(request, device_id):
         outputs = None
 
     return render(request, 'controller/manage_outputs.html', context={'device_id': device_id, 'device_name': user_device.name, 'outputs': outputs})
+
+
+@csrf_exempt
+def unlink_device(request, device_id):
+    if request.method == 'POST':
+        device = User.objects.get(username=device_id)
+        if not Device.objects.filter(user=request.user, device=device).exists():
+            return json_response(message='device not linked to user', status=status.HTTP_400_BAD_REQUEST)
+        
+        from channels.layers import get_channel_layer
+        from asgiref.sync import async_to_sync
+        
+        channel_layer = get_channel_layer()
+        print(channel_layer, "wololo")
+        # print('json form cleaned_data ', json.dumps(form.cleaned_data))
+        print('Device id ', device_id)
+        form = DeviceUnlinkedForm({'device_id': device})
+        if not form.is_valid():
+            print(form.errors.get_json_data())
+            return json_response(message='device was expected to exist', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        form.save()
+        async_to_sync(channel_layer.group_send)(device_id, {
+            'type': 'broadcast_message',
+            'text': {'data': {'Hour': datetime.datetime.now().strftime('%H:%M:%S')}, 'msg': status_codes.UNLINK},
+        })
+
+        return json_response(message='device unlinked')
+
+    return json_response(status=status.HTTP_404_NOT_FOUND)
 
 
 def get_config(request, device_id):

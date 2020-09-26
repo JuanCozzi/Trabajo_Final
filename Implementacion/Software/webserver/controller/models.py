@@ -211,6 +211,9 @@ class DeviceOutput(models.Model):
             'Status': self.status,
         }
 
+class DeviceUnlinked(models.Model):
+    device_id = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
 
 from django import forms
 
@@ -238,12 +241,19 @@ class DeviceOutputForm(forms.ModelForm):
         # print('POWER ', power)
         energy_max = cleaned_data.get('energy_max') or 0
         # print('ENERGY MAX ', energy_max)
+        hour_on = cleaned_data.get('hour_on') or 0
+        time_on = cleaned_data.get('time_on') or 0
 
         if energy_max != 0:
             if power == 0:
                 raise forms.ValidationError('The power consumption must be specified.')
             elif (energy_max * 60000) / power > DeviceOutput.MAX_TIME_MAX:
                 raise forms.ValidationError(f'Time max must be less than {DeviceOutput.MAX_TIME_MAX}.')
+
+        if hour_on != 0:
+            if time_on == 0:
+                raise forms.ValidationError('The time on must be specified to set the hour on.')
+
 
         # return cleaned_data
 
@@ -278,6 +288,12 @@ class DeviceTemperatureForm(forms.ModelForm):
     class Meta:
         model = DeviceTemperature
         fields = ['device_id', 'temperature']
+        
+        
+class DeviceUnlinkedForm(forms.ModelForm):
+    class Meta:
+        model = DeviceUnlinked
+        fields = ['device_id']
 
 
 # class DeviceTemperatures(models.Model):

@@ -95,11 +95,12 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
         print('Usuario ', device)
         print('Usuario is authenticated', device.is_authenticated)
         print('Usuario is device', device.is_device)
+        print('Dispositivo asociado ', await self.device_linked(device.username))
 
-        if device.is_authenticated and device.is_device:
+        device_id = device.username
+        print('Device id ', device_id)
 
-            device_id = device.username
-            print('Device id ', device_id)
+        if device.is_authenticated and device.is_device and await self.device_linked(device_id):
 
             await self.channel_layer.group_add('%s' % device_id, self.channel_name)
 
@@ -107,7 +108,20 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
 
             await self.send_json('Conectado al canal del device %s' % device_id)
 
+            print('SETEO CONECTADO')
             await database_sync_to_async(Device.set_connected)(device, True)
+
+            if await self.unlink_required(device_id):
+                await self.send_json({
+                    'Hour': datetime.datetime.now().strftime('%H:%M:%S'),
+                    'msg': status_codes.UNLINK
+                })
+            else:
+                await self.send_json({
+                    'Hour': datetime.datetime.now().strftime('%H:%M:%S'),
+                    'msg': status_codes.ALL_PARAMETERS_GET_FROM_DEVICE
+                })
+
         else:
             await self.close()
 
@@ -164,7 +178,24 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
         elif msg == status_codes.WORKING_TIME_AND_TEMPERATURE_GOT_FROM_DEVICE:
             response = content
         elif msg == status_codes.ALL_PARAMETERS_GOT_FROM_DEVICE:
-            response = content
+            # ME PARECE QUE CONVENDRIA QUE LO UNICO QUE PISEMOS SEA EL
+            # STATUS, QUE ES LO UNICO QUE PUEDE CAMBIAR EL DISPOSITIVO
+            print('ALL_PARAMETERS_GOT_FROM_DEVICE message')
+            print('FOR OUTPUT ', content['data']['Output'])
+            # content['data']['ID'] = device_id
+            print(content['data'])
+            try:
+                update_result, errors = await self.update_output(device_id, content['data'])
+                response = {'msg': status_codes.OK}
+                if not update_result:
+                    response['msg'] = status_codes.PARAMETER_SET_IN_SERVER_FAILED
+                    response['data'] = errors
+            except DeviceOutput.DoesNotExist:
+                print('NO EXISTE')
+                response = {'msg': status_codes.OK}
+        elif msg == status_codes.UNLINK_CONFIRMED_BY_DEVICE:
+            await self.unlink_device_confirmed(device_id)
+            response = {'msg': status_codes.UNLINK_CONFIRMED_BY_SERVER}
         # VALE LA PENA INFORMARLOS CON UN ALERT???
         elif msg == status_codes.TEMPERATURE_DEPENDENT_OUTPUT_ELECTRICALLY_ON:
             content['data']['Status'] = DeviceOutput.STATUS_ON
@@ -256,12 +287,13 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
         
         print('Update output ', output_data)
         output_data['ID'] = device_id
-        try:
-            device_output = DeviceOutput.objects.get(device_id=User.objects.get(username=device_id), output=output_data['Output'])
-        except DeviceOutput.DoesNotExist:
-            # ACA VA UN ERROR, PORQUE ESTO ES UPDATE, TIENE QUE EXISTIR
-            device_output = None
+        # try:
+        device_output = DeviceOutput.objects.get(device_id=User.objects.get(username=device_id), output=output_data['Output'])
+        # except DeviceOutput.DoesNotExist:
+            # HABRIA QUE VER SI HACE FALTA DAR UN ERROR
+            # device_output = None
         # if device_output is not None:
+
         form = DeviceOutputForm(DeviceOutput.prepare_to_update(device_output, output_data), instance=device_output)
         # else:
             # form = DeviceOutputForm(output_data)
@@ -309,6 +341,21 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
             return True
         else:
             return False
+
+    @database_sync_to_async
+    def device_linked(self, device_id):
+        return Device.objects.filter(device_id=User.objects.get(username=device_id)).exists()
+
+    @database_sync_to_async
+    def unlink_required(self, device_id):
+        return DeviceUnlinked.objects.filter(device_id=User.objects.get(username=device_id)).exists()
+
+    @database_sync_to_async
+    def unlink_device_confirmed(self, device_id):
+        print('ELIMINO DISPOSITIVO')
+        device = User.objects.get(username=device_id)
+        DeviceUnlinked.objects.get(device_id=device).delete()
+        Device.objects.get(device_id=device).delete()
 
     async def broadcast_message(self, event):
         print('Device broadcast_message ', event)
@@ -427,8 +474,10 @@ class UserConsumer(AsyncJsonWebsocketConsumer):
             response = content
         elif msg == status_codes.WORKING_TIME_AND_TEMPERATURE_GET_FROM_DEVICE:
             response = content
-        elif msg == status_codes.ALL_PARAMETERS_GET_FROM_DEVICE:
+        elif msg == status_codes.UNLINK:
+            # ESTO SE ESTA HACIENDO CON UNA REQUEST HTTP EN PRINCIPIO
             response = content
+            response['unlink_set'] = await self.unlink_device(device_id)
 
         response['Hour'] = datetime.datetime.now().strftime('%H:%M:%S')
 
@@ -440,6 +489,14 @@ class UserConsumer(AsyncJsonWebsocketConsumer):
     @database_sync_to_async
     def get_output(self, device_id, output):
         return DeviceOutput.objects.get(device_id=User.objects.get(username=device_id), output=output)
+
+    @database_sync_to_async
+    def unlink_device(self, device_id):
+        form = DeviceUnlinkedForm(device_id)
+        if not form.is_valid():
+            return False
+        form.save()
+        return True
 
     async def broadcast_message(self, event):
         print('User broadcast_message ', event)

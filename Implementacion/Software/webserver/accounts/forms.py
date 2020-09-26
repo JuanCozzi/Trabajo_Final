@@ -49,13 +49,13 @@ class CreateApplicationUserForm(UserCreationForm):
 		return device_id
 
 	@transaction.atomic
-	def save(self):
+	def save(self, device_name=None):
 		user = super().save(commit=False)
 		user.is_application_user = True
 		user.email = self.cleaned_data.get('email')
 		user.save()
 		print('Device id ', self.cleaned_data.get('device_id'))
-		Device.objects.create(user=user, device=User.objects.get(username=self.cleaned_data.get('device_id')))
+		Device.objects.create(user=user, device=User.objects.get(username=self.cleaned_data.get('device_id')), name=device_name)
 		
 		return user
 

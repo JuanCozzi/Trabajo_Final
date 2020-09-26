@@ -18,6 +18,7 @@
 				<h1>Devices available</h1>
 			</div>
 				
+			<div id="userDevices">
 				{% for user_device in user_devices %}
 					<div class="row text-center">
 						<button type="button" class="btn btn-outline-primary" data-device-id="{{user_device.id}}"
@@ -82,6 +83,8 @@
 	{% endfor %}
 	var user_dashboard_url = "{% url 'user_dashboard' %}"
 	var device_dashboard_url = "{% url 'device_dashboard' 123 %}"
+	var unlink_device_url = "{% url 'unlink_device' 123 %}"
+	var get_devices_url = "{% url 'get_devices' %}"
 
 	function unlinkDevicePrepare(device_data) {
 		document.querySelector('#deviceUnlinkID').innerHTML = `Are you sure you want to unlink device <b>${device_data.deviceName !== '' ? device_data.deviceName : device_data.deviceId}</b>? Device configuration will be lost.`;
@@ -90,5 +93,20 @@
 
 	function deviceUnlink(device_id) {
 		console.log(device_id);
+
+		fetch(unlink_device_url.replace('123', device_id), {
+			method: 'POST',
+			headers: {
+				'Content-type': 'application/json',
+			},
+		})
+		.then(function(response) {
+			return response.json();
+		})
+		.then(function(data) {
+			console.log(data)
+			reload_devices();
+		})
 	}
+
 {% endblock %}

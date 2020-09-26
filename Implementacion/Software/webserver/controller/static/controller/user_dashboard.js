@@ -103,3 +103,43 @@ function htmlToElement(html) {
 function deviceSelected(device_id) {
     window.location.href = device_dashboard_url.replace('123', device_id);
 }
+
+function reload_devices() {
+    fetch(get_devices_url, {
+        method: 'GET'
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        console.log(data)
+
+        user_devices_div = document.querySelector('#userDevices')
+        // Clean the user devices div.
+        while (user_devices_div.firstChild) {
+            user_devices_div.removeChild(user_devices_div.firstChild);
+        }
+        
+        data.devices.forEach(device => {
+            let device_div = htmlToElement(`
+                <div class="row text-center">
+                    <button type="button" class="btn btn-outline-primary" data-device-id="${device.id}"
+                        onclick="deviceSelected(this.dataset.deviceId)">
+                        ${ device.name === null ? device.id : device.name }
+                        <span class="small-dot ${ device.connected ? 'on' : 'off' }"
+                            data-toggle="tooltip" title="Device ${ device.connected ? 'on' : 'off' }">
+                        </span>
+                        
+                    </button>
+                    <a href="#unlinkDeviceModal" class="delete" data-device-id="${device.id}"
+                        data-device-name="${ device.name === null ? device.id : device.name }" onclick="unlinkDevicePrepare(this.dataset)" data-toggle="modal">
+                        <i class="material-icons" style="color: #F44336; vertical-align: middle;"
+                            data-toggle="tooltip" title="Unlink">&#xE872;</i>
+                    </a>
+                </div>
+            `)
+
+            user_devices_div.appendChild(device_div)
+        })
+    })
+}

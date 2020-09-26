@@ -45,10 +45,10 @@
 
 using namespace websockets;
 
-const char *ssid = "";  // Network
-const char *password = ""; // Network's password
+const char *ssid = "Fibertel WiFi360 2.4GHz";  // Network
+const char *password = "0041697312"; // Network's password
 
-const char *device_id = "tyWj5hd34k";
+const char *device_id = "pd1";
 const char *device_password = "qwertyas";
 
 const char *header_keys[] = {"Set-Cookie"};
@@ -65,6 +65,7 @@ WebsocketsClient ws_client;
 ESP8266WiFiMulti wifiMulti;
 
 bool authenticated = false;
+bool cookie_added = false;
 bool websocket_connected = false;
 
 bool get_cookie_value(const String &cookies, const String &id, String &value) {
@@ -174,7 +175,40 @@ void onMessageCallback(WebsocketsMessage msg){
       break;
     case REQUEST_ALL_PARAMETER:
       doc["msg"] = RESPONSE_ALL_PARAMETER;
-      response_needed = true;
+      doc["data"] = doc.createNestedObject();
+      for (size_t i = 0; i < 10; i++)
+      {
+        doc["data"]["Output"] = i + 1;
+        if (i > 2 && i < 5) {
+          doc["data"]["HourOn"] = "10:30";
+          doc["data"]["TimeOn"] = 20;
+          doc["data"]["Status"] = true;
+          doc["data"]["OperationTime"] = 100;
+        } else {
+          doc["data"]["HourOn"] = "xx:xx";
+          doc["data"]["TimeOn"] = 0;
+          doc["data"]["Status"] = false;
+          doc["data"]["OperationTime"] = 0;
+        }
+        doc["data"]["TimeMax"] = 200;
+        if (i < 2) {
+          doc["data"]["Level"] = 1;
+          doc["data"]["Force"] = 1;
+          doc["data"]["Control"] = 2;
+          doc["data"]["OperationTime"] = 10;
+        } else {
+          doc["data"]["Level"] = 2;
+          doc["data"]["Force"] = 0;
+          doc["data"]["Control"] = 1;
+        }
+        Serial.println(doc.as<String>());
+        char response[measureJson(doc) + 1];
+        serializeJson(doc, response, measureJson(doc) + 1);
+        Serial.println("Response");
+        Serial.println(response);
+        ws_client.send(response);
+      }
+      response_needed = false;
       break;
     case RESPONSE_ALL_PARAMETER:
       break;
@@ -210,7 +244,11 @@ void wifi_connect() {
 }
 
 void websocket_connect() {
-  ws_client.addHeader("Cookie", session_id);
+  if (!cookie_added)
+  {
+    ws_client.addHeader("Cookie", session_id);
+    cookie_added = true;
+  }
   websocket_connected = ws_client.connect("http://181.171.18.228:8000/ws/controller/device");
   // Serial.println("Estoy conectado?");
   // Serial.println(websocket_connected);

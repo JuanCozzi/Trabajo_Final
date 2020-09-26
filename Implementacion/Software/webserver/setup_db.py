@@ -21,10 +21,13 @@ save_form(form)
 form = CreateApplicationUserForm({'username': 'pau2', 'email': 'a@a.com', 'device_id': 'tyWj5hd34k', 'password1': 'qwertyas', 'password2': 'qwertyas'})
 save_form(form)
 
-from controller.models import DeviceOutputForm, DeviceTemperatureForm
+from controller.models import DeviceOutput, DeviceOutputForm, DeviceTemperatureForm
 
 form = DeviceOutputForm({'device_id': device_1, 'output': 1})
 save_form(form)
+for i in range(2, DeviceOutput.MAX_OUTPUTS + 1):
+    form = DeviceOutputForm({'device_id': device_1, 'output': i})
+    save_form(form)
 form = DeviceOutputForm({'device_id': device_2, 'output': 1})
 save_form(form)
 # form = DeviceTemperatureForm({'device_id': device, 'temperature': 25})
