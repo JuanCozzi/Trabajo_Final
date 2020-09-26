@@ -95,12 +95,12 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
         print('Usuario ', device)
         print('Usuario is authenticated', device.is_authenticated)
         print('Usuario is device', device.is_device)
-        print('Dispositivo asociado ', await self.device_linked(device.username))
+        print('Dispositivo existe ', await self.device_exists(device.username))
 
         device_id = device.username
         print('Device id ', device_id)
 
-        if device.is_authenticated and device.is_device and await self.device_linked(device_id):
+        if device.is_authenticated and device.is_device and await self.device_exists(device_id):
 
             await self.channel_layer.group_add('%s' % device_id, self.channel_name)
 
@@ -343,19 +343,17 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
             return False
 
     @database_sync_to_async
-    def device_linked(self, device_id):
+    def device_exists(self, device_id):
         return Device.objects.filter(device_id=User.objects.get(username=device_id)).exists()
 
     @database_sync_to_async
     def unlink_required(self, device_id):
-        return DeviceUnlinked.objects.filter(device_id=User.objects.get(username=device_id)).exists()
+        return Device.objects.get(device_id=User.objects.get(username=device_id)).unlink_required
 
     @database_sync_to_async
     def unlink_device_confirmed(self, device_id):
         print('ELIMINO DISPOSITIVO')
-        device = User.objects.get(username=device_id)
-        DeviceUnlinked.objects.get(device_id=device).delete()
-        Device.objects.get(device_id=device).delete()
+        Device.objects.get(device_id=User.objects.get(username=device_id)).delete()
 
     async def broadcast_message(self, event):
         print('Device broadcast_message ', event)
@@ -372,7 +370,10 @@ class DeviceConsumer(AsyncJsonWebsocketConsumer):
         device_id = device.username
         print('device_id ', device_id)
 
-        await database_sync_to_async(Device.set_connected)(device, False)
+        try:
+            await database_sync_to_async(Device.set_connected)(device, False)
+        except Exception:
+            pass
 
         await self.channel_layer.group_discard('%s' % device_id, self.channel_name)
 
@@ -474,10 +475,6 @@ class UserConsumer(AsyncJsonWebsocketConsumer):
             response = content
         elif msg == status_codes.WORKING_TIME_AND_TEMPERATURE_GET_FROM_DEVICE:
             response = content
-        elif msg == status_codes.UNLINK:
-            # ESTO SE ESTA HACIENDO CON UNA REQUEST HTTP EN PRINCIPIO
-            response = content
-            response['unlink_set'] = await self.unlink_device(device_id)
 
         response['Hour'] = datetime.datetime.now().strftime('%H:%M:%S')
 
@@ -489,14 +486,6 @@ class UserConsumer(AsyncJsonWebsocketConsumer):
     @database_sync_to_async
     def get_output(self, device_id, output):
         return DeviceOutput.objects.get(device_id=User.objects.get(username=device_id), output=output)
-
-    @database_sync_to_async
-    def unlink_device(self, device_id):
-        form = DeviceUnlinkedForm(device_id)
-        if not form.is_valid():
-            return False
-        form.save()
-        return True
 
     async def broadcast_message(self, event):
         print('User broadcast_message ', event)

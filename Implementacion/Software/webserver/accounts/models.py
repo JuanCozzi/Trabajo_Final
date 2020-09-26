@@ -73,11 +73,18 @@ class Device(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     name = models.CharField(_('Descriptive name'), max_length=150, null=True)
     connected = models.BooleanField(default=False)
+    unlink_required = models.BooleanField(default=False)
 
     @classmethod
     def set_connected(cls, device, connected):
         device_user = cls.objects.get(device=device)
         device_user.connected = connected
+        device_user.save()
+    
+    @classmethod
+    def set_unlink_required(cls, user, device):
+        device_user = cls.objects.get(user=user, device=device)
+        device_user.unlink_required = True
         device_user.save()
 
 

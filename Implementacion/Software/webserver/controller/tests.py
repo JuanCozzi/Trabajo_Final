@@ -1,19 +1,34 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from .models import *
+from accounts.forms import *
 
 
 class DeviceTests(TestCase):
 
     def setUp(self):
-        User = get_user_model()
-        user = User.objects.create_user(email='test@test.com', password='test')
-        # user.save()
-        print(user)
+        def _save_form(form):
+            if form.is_valid():
+                return form.save()
+            else:
+                print('ERRORS ', form.errors.get_json_data())
+                return None
 
-        device = Device.objects.create(device_id=0, user=user)
+        form = CreateDeviceForm({'username': 'pd1', 'password1': 'qwertyas', 'password2': 'qwertyas'})
+        device_1 = _save_form(form)
+        # form = CreateDeviceForm({'username': 'tyWj5hd34k', 'password1': 'qwertyas', 'password2': 'qwertyas'})
+        # device_2 = _save_form(form)
+        form = CreateApplicationUserForm({'username': 'pau1', 'email': 'a@a.com', 'device_id': 'pd1', 'password1': 'qwertyas', 'password2': 'qwertyas'})
+        _save_form(form)
 
     # def test_asd(self):
+    #     device = Device.objects.get(device=User.objects.get(username='pd1'))
+    #     print('el primero ', device.connected)
+    #     device.set()
+    #     print('el primero ', device.connected)
+
+    #     device2 = Device.objects.get(device=User.objects.get(username='pd1'))
+    #     print('el segundo ', device2.connected)
 
     def test_clean_for_device(self):
         # valid device output

@@ -114,8 +114,8 @@
 </body>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        wifi_network_connected();
-        window.setInterval(wifi_network_connected, 10000);
+        device_status();
+        window.setInterval(device_status, 10000);
 
         document.querySelector('#network').value = 'Fibertel WiFi360 2.4GHz'
         document.querySelector('#network_password').value = '0041697312'
@@ -190,7 +190,7 @@
         })
     })
 
-    function wifi_network_connected() {
+    function device_status() {
         fetch('/device/status', {
             method: 'GET'
         })
@@ -201,14 +201,14 @@
             console.log(data)
             wifi_network_status = document.querySelector('#wifiNetworkStatus');
             user_status = document.querySelector('#userStatus');
-            if (data.connected) {
+            if (data.wifi_connected) {
                 wifi_network_status.innerText = `WiFi connected: ${data.ssid}`;
                 wifi_network_status.style.background = 'green';
             } else {
                 wifi_network_status.innerText = `WiFi disconnected: ${data.ssid}`;
                 wifi_network_status.style.background = 'red';
             }
-            if (data.device_associated) {
+            if (data.device_linked) {
                 user_status.innerText = 'User linked';
                 user_status.style.background = 'green';
             } else {

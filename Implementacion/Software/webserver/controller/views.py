@@ -1,6 +1,7 @@
 from utils.utils import json_response
 from django.shortcuts import render
 from django.http import Http404
+from django.db.utils import IntegrityError
 import datetime
 
 
@@ -172,22 +173,24 @@ def manage_outputs(request, device_id):
 @csrf_exempt
 def unlink_device(request, device_id):
     if request.method == 'POST':
-        device = User.objects.get(username=device_id)
+        try:
+            device = User.objects.get(username=device_id)
+        except IntegrityError:
+            return json_response(message='device not linked to user', status=status.HTTP_400_BAD_REQUEST)
+
         if not Device.objects.filter(user=request.user, device=device).exists():
             return json_response(message='device not linked to user', status=status.HTTP_400_BAD_REQUEST)
+
+        Device.set_unlink_required(request.user, device)
         
         from channels.layers import get_channel_layer
         from asgiref.sync import async_to_sync
         
+        print('Get channel layer')
         channel_layer = get_channel_layer()
         print(channel_layer, "wololo")
         # print('json form cleaned_data ', json.dumps(form.cleaned_data))
         print('Device id ', device_id)
-        form = DeviceUnlinkedForm({'device_id': device})
-        if not form.is_valid():
-            print(form.errors.get_json_data())
-            return json_response(message='device was expected to exist', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        form.save()
         async_to_sync(channel_layer.group_send)(device_id, {
             'type': 'broadcast_message',
             'text': {'data': {'Hour': datetime.datetime.now().strftime('%H:%M:%S')}, 'msg': status_codes.UNLINK},
@@ -220,7 +223,7 @@ def get_config(request, device_id):
     return json_response(body={'outputs': [output.to_dict() for output in outputs], 'temperature': temperature})
 
 def _user_devices(user):
-    user_devices = Device.objects.filter(user=user)
+    user_devices = Device.objects.filter(user=user, unlink_required=False)
     user_devices_list = []
     for user_device in user_devices:
         user_devices_list.append({
