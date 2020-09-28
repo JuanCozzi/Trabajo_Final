@@ -45,8 +45,8 @@
 
 using namespace websockets;
 
-const char *ssid = "Fibertel WiFi360 2.4GHz";  // Network
-const char *password = "0041697312"; // Network's password
+const char *ssid = "";  // Network
+const char *password = ""; // Network's password
 
 const char *device_id = "pd1";
 const char *device_password = "qwertyas";

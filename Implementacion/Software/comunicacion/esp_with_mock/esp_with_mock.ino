@@ -52,6 +52,7 @@ using namespace websockets;
 /** Webserver URIs. */
 
 #define URI_DEVICE_STATUS "/device/status"
+#define URI_NETWORKS_AVAILABLE "/network/available"
 #define URI_NETWORK_CONFIG "/network"
 #define URI_USER_CONFIG "/user"
 
@@ -94,6 +95,7 @@ using namespace websockets;
 
 void server_start();
 void handle_device_status();
+void handle_get_networks_available();
 void handle_network_config_post();
 void handle_user_config_post();
 void handle_not_found();
@@ -123,6 +125,7 @@ void delete_device_user();
 /** Utils. */
 
 bool get_cookie_value(const String &set_cookie_header, const String &id, String &value);
+int get_rssi_as_quality(int rssi);
 
 
 /*******************************************************************************
@@ -583,6 +586,7 @@ void server_start() {
 
   // Set the functions associated with the corresponding webserver endpoints and HTTP methods
   server.on(URI_DEVICE_STATUS, HTTP_GET, handle_device_status);
+  server.on(URI_NETWORKS_AVAILABLE, HTTP_GET, handle_get_networks_available);
   server.on(URI_NETWORK_CONFIG, HTTP_POST, handle_network_config_post);
   server.on(URI_USER_CONFIG, HTTP_POST, handle_user_config_post);
   // When a client requests an unknown URI, call function "handle_not_found"
@@ -612,16 +616,9 @@ void wifi_connect(const char *ssid, const char *password) {
   WiFi.disconnect();
   Serial.println("After disconnect");
   Serial.println(WiFi.SSID());
+
   // Connect to the WiFi network
   WiFi.begin(ssid, password);
-
-  //check wi-fi is connected to wi-fi network
-  // while (WiFi.status() != WL_CONNECTED) {
-  //   delay(500);
-  //   Serial.print(".");
-  // }
-  // Serial.println("");
-  // Serial.println("WiFi connected");
 }
 
 
@@ -727,6 +724,60 @@ void handle_device_status() {
   Serial.println("Response");
   Serial.println(response);
 
+  server.send(200, "application/json", response);
+}
+
+
+/**
+ * @brief Transforms the RSSI into quality.
+ * 
+ * @param rssi WiFi network RSSI.
+ * @return int Quality.
+ */
+int get_rssi_as_quality(int rssi) {
+  int quality = 0;
+
+  if (rssi <= -100) {
+    quality = 0;
+  } else if (rssi >= -50) {
+    quality = 100;
+  } else {
+    quality = 2 * (rssi + 100);
+  }
+
+  return quality;
+}
+
+
+/**
+ * @brief Searches for available networks.
+ * 
+ */
+void handle_get_networks_available() {
+  Serial.println("Networks available");
+
+  DynamicJsonDocument doc(2048);
+
+  JsonArray networks = doc.createNestedArray("networks");
+
+  int8_t n = WiFi.scanNetworks();
+
+  for (size_t i = 0; i < n; i++) {
+    Serial.println(WiFi.SSID(i));
+    JsonObject network = networks.createNestedObject();
+
+    network["ssid"] = WiFi.SSID(i);
+    network["quality"] = get_rssi_as_quality(WiFi.RSSI(i));
+    network["encrypted"] = WiFi.encryptionType(i) != ENC_TYPE_NONE;
+  }
+
+  WiFi.scanDelete();
+
+  char response[measureJson(doc) + 1];
+  serializeJson(doc, response, sizeof(response));
+
+  Serial.println(response);
+  
   server.send(200, "application/json", response);
 }
 

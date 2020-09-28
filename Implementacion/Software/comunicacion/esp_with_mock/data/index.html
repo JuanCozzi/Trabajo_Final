@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NARO 24AC</title>
+    <link rel="stylesheet" type="text/css" href="roboto_varela_round.css">
+    <style>
+        html {
+            font-family: 'Varela Round', Verdana;
+            display: inline-block;
+            margin: 0px auto;
+            box-sizing: border-box;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        .input-container{
+            position:relative;
+            margin-bottom:25px;
+        }
+        .input-container label{
+            position:absolute;
+            top:0px;
+            left:0px;
+            font-size:16px;
+            color:rgb(0, 0, 0);	
+            pointer-event: none;
+            transition: all 0.5s ease-in-out;
+        }
+        .input-container input{ 
+            border:0;
+            border-bottom:1px solid #555;  
+            background:transparent;
+            width:100%;
+            padding:8px 0 5px 0;
+            font-size:16px;
+            color:rgb(0, 0, 0);
+        }
+        .input-container input:focus{ 
+            border:none;	
+            outline:none;
+            border-bottom:1px solid #14d373;	
+        }
+        .input-container input:focus ~ label,
+        .input-container input:valid ~ label{
+            top:-12px;
+            font-size:12px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #1fa3ec;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            padding: 10px 40px;
+            text-decoration: none;
+            font-size: 30px;
+            margin: 2px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .button-back {
+            background-color: #14d373;
+        }
+
+        .quality {
+            float: right;
+            width: 64px;
+            text-align: right;
+        }
+
+        .lock {
+            background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAALVBMVEX///8EBwfBwsLw8PAzNjaCg4NTVVUjJiZDRUUUFxdiZGSho6OSk5Pg4eFydHTCjaf3AAAAZElEQVQ4je2NSw7AIAhEBamKn97/uMXEGBvozkWb9C2Zx4xzWykBhFAeYp9gkLyZE0zIMno9n4g19hmdY39scwqVkOXaxph0ZCXQcqxSpgQpONa59wkRDOL93eAXvimwlbPbwwVAegLS1HGfZAAAAABJRU5ErkJggg==") no-repeat left center;
+            background-size: 1em;
+        }
+        
+        .dot {
+            height: 15px;
+            width: 15px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .on {
+            background-color: #14d373;
+        }
+
+        .active {
+            display: block;
+        }
+
+        .inactive {
+            display: none;
+        }
+
+        .active-status {
+
+        }
+        
+        .active-status ul {
+            padding: 50px 0;
+            list-style-type: none;
+        }
+
+        .active-status li {
+            background-color: #f0f0f0;
+            border-radius: 4px;
+            padding: 5px 10px;
+            margin: 2px;
+            /* adjust list item width to list item text's width */
+            float:left;
+            clear:left;
+        }
+        
+        *, *:before, *:after {
+        box-sizing: inherit;
+        }
+
+        /* GRID */
+
+        /* CONTAINER */
+        .container {
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                width: 750px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .container {
+                width: 970px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                width: 1170px;
+            }
+        }
+
+
+        /* ROW */
+        .row {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-gap: 20px;
+        }
+
+
+        .col-xs-12 {
+            grid-column: span 12
+        }
+
+        .col-xs-11 {
+            grid-column: span 11;
+        }
+
+        .col-xs-10 {
+            grid-column: span 10
+        }
+
+        .col-xs-9 {
+            grid-column: span 9
+        }
+
+        .col-xs-8 {
+            grid-column: span 8
+        }
+
+        .col-xs-7 {
+            grid-column: span 7
+        }
+
+        .col-xs-6 {
+            grid-column: span 6
+        }
+
+        .col-xs-5 {
+            grid-column: span 5
+        }
+
+        .col-xs-4 {
+            grid-column: span 4
+        }
+
+        .col-xs-3 {
+            grid-column: span 3
+        }
+
+        .col-xs-2 {
+            grid-column: span 2
+        }
+
+        .col-xs-1 {
+            grid-column: span 1
+        }
+
+        @media (min-width: 768px) {
+            .col-sm-12 {
+                grid-column: span 12
+            }
+
+            .col-sm-11 {
+                grid-column: span 11;
+            }
+
+            .col-sm-10 {
+                grid-column: span 10
+            }
+
+            .col-sm-9 {
+                grid-column: span 9
+            }
+
+            .col-sm-8 {
+                grid-column: span 8
+            }
+
+            .col-sm-7 {
+                grid-column: span 7
+            }
+
+            .col-sm-6 {
+                grid-column: span 6
+            }
+
+            .col-sm-5 {
+                grid-column: span 5
+            }
+
+            .col-sm-4 {
+                grid-column: span 4
+            }
+
+            .col-sm-3 {
+                grid-column: span 3
+            }
+
+            .col-sm-2 {
+                grid-column: span 2
+            }
+
+            .col-sm-1 {
+                grid-column: span 1
+            }
+        }
+
+        @media (min-width: 992px) {
+            .col-md-12 {
+                grid-column: span 12
+            }
+
+            .col-md-11 {
+                grid-column: span 11;
+            }
+
+            .col-md-10 {
+                grid-column: span 10
+            }
+
+            .col-md-9 {
+                grid-column: span 9
+            }
+
+            .col-md-8 {
+                grid-column: span 8
+            }
+
+            .col-md-7 {
+                grid-column: span 7
+            }
+
+            .col-md-6 {
+                grid-column: span 6
+            }
+
+            .col-md-5 {
+                grid-column: span 5
+            }
+
+            .col-md-4 {
+                grid-column: span 4
+            }
+
+            .col-md-3 {
+                grid-column: span 3
+            }
+
+            .col-md-2 {
+                grid-column: span 2
+            }
+
+            .col-md-1 {
+                grid-column: span 1
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .col-lg-12 {
+                grid-column: span 12
+            }
+
+            .col-lg-11 {
+                grid-column: span 11;
+            }
+
+            .col-lg-10 {
+                grid-column: span 10
+            }
+
+            .col-lg-9 {
+                grid-column: span 9
+            }
+
+            .col-lg-8 {
+                grid-column: span 8
+            }
+
+            .col-lg-7 {
+                grid-column: span 7
+            }
+
+            .col-lg-6 {
+                grid-column: span 6
+            }
+
+            .col-lg-5 {
+                grid-column: span 5
+            }
+
+            .col-lg-4 {
+                grid-column: span 4
+            }
+
+            .col-lg-3 {
+                grid-column: span 3
+            }
+
+            .col-lg-2 {
+                grid-column: span 2
+            }
+
+            .col-lg-1 {
+                grid-column: span 1
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 col-md-3" style="visibility: hidden;">dummy</div>
+
+            <div class="col-xs-12 col-sm-6 col-md-6 active" id="homeDiv">
+                <h1>NARO 24AC Configuration</h1>
+                <div class="active-status" id="homeDivStatus"></div>
+                <br><br>
+                <button class="button" id="networkShowButton">Network</button>
+                <br><br>
+                <button class="button" id="userShowButton">Account</button>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 inactive" id="networkDiv">
+                <h1>Network Configuration</h1>
+                <div id="networkDivStatus"></div>
+                <br><br>
+                <button class="button" id="scanNetworksButton">Scan networks</button>
+                <br><br>
+                <div id="networksAvailableDiv">
+                </div>
+                <br><br>
+                <br><br>
+                <div class="input-container">
+                    <input type="text" id="network" required=""/>
+                    <label>Network</label>
+                </div>
+                <br><br>
+                <div class="input-container">
+                    <input type="password" id="network_password" required=""/>
+                    <label>Password</label>
+                </div>
+                <br><br>
+                <button class="button" id="networkButton">Send</button>
+                <br><br>
+                <button class="button button-back">Go back</button>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 inactive" id="userDiv">
+                <h1>Account Configuration</h1>
+                <div id="userDivStatus"></div>
+                <br><br>
+                <div class="input-container">
+                    <input type="text" id="user_name" required=""/>
+                    <label>Username</label>
+                </div>
+                <br><br>
+                <div class="input-container">
+                    <input type="email" id="email" required=""/>
+                    <label>Email</label>
+                </div>
+                <br><br>
+                <div class="input-container">
+                    <input type="text" id="device_name" required=""/>
+                    <label>Device name</label>
+                </div>
+                <br><br>
+                <div class="input-container">
+                    <input type="password" id="user_password" required=""/>
+                    <label>Password</label>
+                </div>
+                <br><br>
+                <button class="button" id="userButton">Send</button>
+                <br><br>
+                <button class="button button-back">Go back</button>
+            </div>
+            
+            <div class="col-sm-3 col-md-3" style="visibility: hidden;">dummy</div>
+
+        </div>
+    </div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        window.setInterval(device_status, 1000);
+        
+        // document.querySelector('#network').value = 'Fibertel WiFi360 2.4GHz'
+        // document.querySelector('#network_password').value = '0041697312'
+        // document.querySelector('#user_name').value = 'example'
+        // document.querySelector('#email').value = 'example@user.com'
+        // document.querySelector('#device_name').value = 'Mi dispositivo'
+        // document.querySelector('#user_password').value = 'qwertyas'
+
+        document.querySelectorAll('.button-back').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelector('#homeDiv').classList.remove('inactive');
+                document.querySelector('#homeDiv').classList.add('active');
+                document.querySelector('#networkDiv').classList.remove('active');
+                document.querySelector('#networkDiv').classList.add('inactive');
+                document.querySelector('#userDiv').classList.remove('active');
+                document.querySelector('#userDiv').classList.add('inactive');
+
+                document.querySelector('#homeDivStatus').classList.add('active-status');
+                document.querySelector('#networkDivStatus').classList.remove('active-status');
+                document.querySelector('#userDivStatus').classList.remove('active-status');
+            })
+        })
+
+        document.querySelector('#networkShowButton').addEventListener('click', function() {
+            document.querySelector('#homeDiv').classList.remove('active');
+            document.querySelector('#homeDiv').classList.add('inactive');
+            document.querySelector('#networkDiv').classList.remove('inactive');
+            document.querySelector('#networkDiv').classList.add('active');
+            document.querySelector('#userDiv').classList.remove('active');
+            document.querySelector('#userDiv').classList.add('inactive');
+
+            document.querySelector('#homeDivStatus').classList.remove('active-status');
+            document.querySelector('#networkDivStatus').classList.add('active-status');
+            document.querySelector('#userDivStatus').classList.remove('active-status');
+        })
+        
+        document.querySelector('#userShowButton').addEventListener('click', function() {
+            document.querySelector('#homeDiv').classList.remove('active');
+            document.querySelector('#homeDiv').classList.add('inactive');
+            document.querySelector('#networkDiv').classList.remove('active');
+            document.querySelector('#networkDiv').classList.add('inactive');
+            document.querySelector('#userDiv').classList.remove('inactive');
+            document.querySelector('#userDiv').classList.add('active');
+
+            document.querySelector('#homeDivStatus').classList.remove('active-status');
+            document.querySelector('#networkDivStatus').classList.remove('active-status');
+            document.querySelector('#userDivStatus').classList.add('active-status');
+        })
+
+        document.querySelector('#scanNetworksButton').addEventListener('click', function() {
+            fetch('/network/available', {
+                method: 'GET',
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                console.log(data)
+                                
+                data.networks.sort(function(n_1, n_2) {
+                    return n_2.quality - n_1.quality;
+                })
+                
+                console.log(data)
+
+                networks_available_div = document.querySelector('#networksAvailableDiv')
+                data.networks.forEach(network => {
+                    networks_available_div.appendChild(htmlToElement(`
+                        <label><a href="#p" data-ssid="${network.ssid}" onclick="set_network_ssid(this.dataset.ssid)">${network.ssid}</a>&nbsp;<span class="quality ${network.encrypted ? 'lock' : ''}">${network.quality}%</span></label>
+                    `))
+                    networks_available_div.appendChild(htmlToElement(`<br>`))
+                })
+            })
+        })
+        document.querySelector('#networkButton').addEventListener('click', function() {
+            fetch('/network', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'ssid': document.querySelector('#network').value,
+                    'password': document.querySelector('#network_password').value
+                    // 'ssid': 'Fibertel WiFi360 2.4GHz',
+                    // 'password': '0041697312'
+                })
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                console.log(data)
+            })
+        })
+        document.querySelector('#userButton').addEventListener('click', function() {
+            fetch('/user', {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'username': document.querySelector('#user_name').value,
+                    'email': document.querySelector('#email').value,
+                    'device_name': document.querySelector('#device_name').value,
+                    'password': document.querySelector('#user_password').value
+                    // 'user_name': 'example',
+                    // 'email': 'example@email.com',
+                    // 'device_name': 'pd1',
+                    // 'password': 'qwertyas'
+                })
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                console.log(data)
+            })
+        })
+    })
+
+    /**
+    * @param {String} HTML representing a single element
+    * @return {Element}
+    */
+    function htmlToElement(html) {
+        var template = document.createElement('template');
+        html = html.trim(); // Never return a text node of whitespace as the result
+        template.innerHTML = html;
+        return template.content.firstChild;
+    }
+
+    function set_network_ssid(ssid) {
+        document.querySelector('#network').value = ssid;
+        document.querySelector('#network_password').focus();
+    }
+
+    function device_status() {
+        fetch('/device/status', {
+            method: 'GET'
+        })
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            console.log(data)
+
+            let active_status = document.querySelector('.active-status')
+
+            while (active_status.firstChild) {
+                active_status.removeChild(active_status.firstChild);
+            }
+
+            active_status.appendChild(htmlToElement(`
+                <ul>
+                    <li><span class="dot ${data.wifi_connected ? 'on' : ''}"></span> &nbsp; WiFi Network: ${data.ssid !== '' ? data.ssid : 'None'}</li>
+                    <li><span class="dot ${data.device_linked ? 'on' : ''}"></span> &nbsp; User ${data.device_linked ? '' : 'not'} linked</li>
+                </ul>
+            `))
+        })
+    }
+</script>
+</html>
