@@ -30,6 +30,8 @@ ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'accounts.User'
 
+LOGIN_URL = '/accounts/'
+
 
 # Application definition
 

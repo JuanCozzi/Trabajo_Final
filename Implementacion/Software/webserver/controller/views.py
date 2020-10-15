@@ -1,133 +1,22 @@
-from utils.utils import json_response
 from django.shortcuts import render
 from django.http import Http404
 from django.db.utils import IntegrityError
-import datetime
-
-
-TEST = {
-    "Estado": [
-        0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-    ],
-    "T_arranque": [
-        "22:30",
-        "-",
-        "7:00",
-        "-",
-        "-",
-        "-",
-        "-",
-        "-",
-        "-",
-        "-"
-    ],
-    "Ton": [
-        60,
-        0,
-        0,
-        30,
-        0,
-        0,
-        5,
-        0,
-        0,
-        0
-    ],
-    "Potencia":[
-        2000,
-        0,
-        3000,
-        0,
-        0,
-        752,
-        0,
-        0,
-        0,
-        0
-    ],
-    "MaxEnergia":[
-        10,
-        0,
-        10,
-        0,
-        0,
-        2,
-        0,
-        0,
-        0,
-        0
-    ],
-    "Tfuncionamiento": [
-        10,
-        0,
-        20,
-        70,
-        0,
-        2,
-        430,
-        0,
-        220,
-        0
-    ],
-    "Encendido":[
-        1,
-        1,
-        2,
-        2,
-        3,
-        3,
-        4,
-        3,
-        4,
-        0
-    ],
-    "Nivel":[
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        2,
-        0,
-        0,
-        0
-    ],
-    "Forzar":[
-        2,
-        0,
-        5,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-    ],
-    "Hora": "22:00"
-}
-
-
-def test(request):
-    return json_response(body=TEST)
-
+from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
+
 from rest_framework import status
 from .models import *
 from accounts.models import *
 from controller import status_codes
+from utils.utils import json_response
+from accounts.decorators import check_user, UserRole
+
+import datetime
 import json
+
+
 @csrf_exempt
+@check_user(UserRole.APPLICATION_USER)
 def manage_outputs(request, device_id):
 
     if request.method == 'POST':
@@ -171,6 +60,7 @@ def manage_outputs(request, device_id):
 
 
 @csrf_exempt
+@check_user(UserRole.APPLICATION_USER)
 def unlink_device(request, device_id):
     if request.method == 'POST':
         try:
@@ -201,6 +91,7 @@ def unlink_device(request, device_id):
     return json_response(status=status.HTTP_404_NOT_FOUND)
 
 
+@check_user(UserRole.APPLICATION_USER)
 def get_config(request, device_id):
     print('device_id ', device_id)
 
@@ -239,12 +130,14 @@ def _user_devices(user):
 def get_devices(request):
     return json_response(body={'devices': _user_devices(request.user)})
 
+@check_user(UserRole.APPLICATION_USER)
 def user_dashboard(request):
     print('ACA')
     return render(request,
                   'controller/user_dashboard.html',
                   context={'user_devices': _user_devices(request.user)})
 
+@check_user(UserRole.APPLICATION_USER)
 def device_dashboard(request, device_id):
     print('device_id ', device_id)
 
